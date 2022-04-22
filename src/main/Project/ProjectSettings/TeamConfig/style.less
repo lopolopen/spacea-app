@@ -1,0 +1,61 @@
+@big-font-size: 24px;
+@mid-font-size: 16px;
+@disabledColor: #b5b5b5;
+
+.TeamConfig {
+    padding: 24px;
+    min-width: 800px;
+
+    .ant-tabs-tab {
+        padding: 8px 0;
+    }
+
+    .ant-tabs-bar {
+        margin: 0;
+        border: 0;
+    }
+
+    .ant-tabs-ink-bar {
+        display: none !important;
+    }
+
+    .head {
+        font-size: @big-font-size;
+        color: black;
+    }
+
+    .label {
+        font-size: @mid-font-size;
+        margin: 24px 0 8px 0;
+    }
+
+    .divider {
+        border-top: 1px #eee solid;
+        margin: 24px 0px;
+    }
+
+    .iteration-tool-bar {
+        margin: 0 16px;
+    }
+
+    .table-wrapper {
+
+        .ant-table {
+            border: 0;
+
+            .ant-table-row {
+                .to-excludes {
+                    a {
+                        color: red;
+                    }
+                }
+
+                .is-default {
+                    a {
+                        color: @disabledColor;
+                    }
+                }
+            }
+        }
+    }
+}

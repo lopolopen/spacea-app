@@ -1,0 +1,89 @@
+.WorkItemHistory {
+  margin: 8px 16px;
+
+  .history-timeline {
+    //height: set by js dynamicly
+    overflow-y: auto;
+    margin-right: 12px;
+
+    .ant-timeline-item {
+      padding-bottom: 8px;
+    }
+
+    .history-diff-item {
+      position: relative;
+      top: -8px;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px;
+      color: rgba(0, 0, 0, 0.65);
+
+      &.active {
+        background: #fafafa;
+      }
+
+      &:hover {
+        background: #e6f7ff;
+      }
+    }
+  }
+
+  .selected-diff-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 8px 16px;
+    width: 100%;
+    background: #fafafa;
+    font-size: 1.2em;
+    // font-weight: bold;
+  }
+
+  .history-diff-points-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 12px;
+  }
+
+  .history-diff-points {
+    display: table;
+    width: 100%;
+    border-spacing: 0 6px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 8px 16px;
+
+    .history-diff-point {
+      display: table-row;
+
+      &:nth-child(even) {
+        background: #fafafa;
+      }
+
+      .history-diff-field {
+        display: table-cell;
+        width: 80px;
+        white-space: nowrap;
+      }
+
+      .history-diff-main {
+        display: table-cell;
+      }
+    }
+
+    .added {
+      padding: 0.4em;
+      background: rgba(0, 255, 0, 0.2);
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    .removed {
+      padding: 0.4em;
+      background: rgba(255, 0, 0, 0.25);
+      color: rgba(0, 0, 0, 0.8);
+      text-decoration: line-through;
+    }
+  }
+}

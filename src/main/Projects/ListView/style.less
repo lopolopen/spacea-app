@@ -1,0 +1,54 @@
+@loadingMembers-color: #000000a6;
+
+.infiniteScrollList {
+
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    overflow: auto;
+    padding: 8px 24px;
+    height: 700px;
+
+    .ant-list-item-meta-avatar {
+        span {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            margin-top: 3px;
+        }
+
+        .ant-avatar-image {
+            border: 1px solid #e8e8e8;
+        }
+    }
+
+    .ant-list-item-meta-description,
+    .ant-list-item-meta-title {
+        white-space: nowrap;
+        overflow:hidden;
+        width: 60vw;
+    }
+
+    .creatorHeadPortrait {
+        border: 2px solid #bbbbbb;
+    }
+
+    .membersHeadPortrait {
+        max-width: 225px;
+        word-break: keep-all;
+        white-space: nowrap;
+        overflow:hidden;
+        cursor: pointer;
+    }
+
+    .loadingMembers {
+        width: 30px;
+        margin: 15px 0 0 2px;
+        font-weight: bold;
+        color: @loadingMembers-color;
+
+        a {
+            color: @loadingMembers-color;
+        }
+    }
+
+}

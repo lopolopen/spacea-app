@@ -1,0 +1,55 @@
+@menu-item-size: 16px;
+@menu-active-color: #1890ff;
+
+.NavMenu {
+  li:first-child {
+    margin-top: 0;
+  }
+
+  svg {
+    font-size: @menu-item-size;
+  }
+
+  span:not(.ant-tag) {
+    color: black;
+    font-size: @menu-item-size
+  }
+
+  .ant-menu-item-active,
+  .ant-menu-item-selected {
+    span:not(.ant-tag) {
+      color: @menu-active-color;
+    }
+  }
+
+  .ant-menu-submenu-selected {
+    .ant-menu-submenu-title {
+      span:not(.ant-tag) {
+        color: @menu-active-color;
+      }
+    }
+  }
+
+  .ant-tag {
+    font-size: 12px !important;
+  }
+
+  .service-state {
+    position: relative;
+    
+    .ant-badge {
+      position: absolute;
+      left: -16px;
+    }
+  }
+
+  .service-tag {
+    margin-left: 4px;
+  }
+
+  @media screen and (max-width: 10000px) {
+    .ant-layout-sider {
+      width: auto !important;
+    }
+  }
+}

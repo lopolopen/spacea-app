@@ -1,0 +1,175 @@
+@big-font-size: 28px;
+@mid-font-size: 22px;
+@small-font-size: 16px;
+
+.TopBar {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-bottom: 1px solid#eee;
+
+  .left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: @big-font-size;
+    font-weight: bold;
+    min-width: 200px;
+    margin-left: -16px;
+
+    a {
+      display: flex;
+      align-items: center;
+      color: rgba(0, 0, 0, 0.65);
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      animation-name: spin;
+      animation-duration: 80s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+
+    span {
+      white-space: nowrap;
+      margin-left: 6px;
+    }
+  }
+
+  .bread-crumb {
+    font-size: @small-font-size;
+
+    span {
+      color: rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  .right3 {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: row-reverse;
+    width: 100%;
+    align-items: center;
+
+    ul {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding-left: 8px;
+    }
+
+    li {
+      list-style-type: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      margin: 0 8px;
+      cursor: pointer;
+
+      svg {
+        font-size: @mid-font-size;
+      }
+    }
+
+    li:hover {
+      background-color: #e6f7ff;
+    }
+
+    li:last-child {
+      background-color: transparent;
+    }
+  }
+
+  .bolt-portal-mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    // border: 1px solid red;
+    display: none;
+    overflow: hidden;
+  }
+
+  .bolt-portal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 64px 12px;
+    width: 520px;
+    background: white;
+    box-shadow: 0 25.6px 57.6px rgba(0, 0, 0, .22), 0 4.8px 14.4px rgba(0, 0, 0, .18);
+    border-radius: 6px;
+    display: none;
+    padding: 0 12px 12px 12px;
+
+    a {
+      color: rgba(0, 0, 0, 0.65);
+    }
+
+    a:hover {
+      color: #3399ea;
+    }
+
+    .ant-tabs-bar {
+      margin-bottom: 12px;
+    }
+
+    .ant-list-header {
+      position: sticky !important;
+      z-index: 10;
+      top: 0;
+      padding: 4px 8px;
+      border-radius: 2px;
+      background-color: #e8e8e8;
+    }
+
+    .scroll-list {
+      overflow-y: auto;
+      max-height: calc(100vh - 260px);
+    }
+
+    .ant-list {
+      min-height: 100px;
+    }
+
+    .ant-list-item {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .ant-list-item {
+      &.active {
+        background: #fafafa;
+      }
+
+      &:hover {
+        background: #e6f7ff;
+      }
+    }
+  }
+
+  .visible {
+    display: block !important;
+  }
+}
+
+.build-info {
+  
+}

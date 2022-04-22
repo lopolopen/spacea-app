@@ -1,0 +1,28 @@
+.Projects {
+  min-width: 900px;
+
+  .search-box {
+    .ant-input {
+      border: none;
+      box-shadow: none;
+      width: 120px;
+      transition: width 0.3s;
+
+      &:focus {
+        width: 200px;
+
+        &::placeholder {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .projet-cards {
+    margin: 0 12px;
+    border: 1px solid #e8e8e8;
+    max-height: calc(100vh - 200px);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}

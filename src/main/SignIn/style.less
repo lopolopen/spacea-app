@@ -1,0 +1,110 @@
+.SignIn {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 100vh;
+    min-height: 490px;
+
+    .left {
+        display: flex;
+        flex: 1 0 320px;
+        height: 50vh;
+        align-items: center;
+        justify-content: center;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            img {
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                animation-name: spin;
+                animation-duration: 80s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+
+            span {
+                white-space: nowrap;
+                font-size: 32px;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1 0 320px;
+        border: 0;
+        height: 50vh;
+
+        .sign-in {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-top: 12px;
+
+            .sign-in-form {
+                width: 300px;
+            }
+
+            .sign-in-form-button {
+                width: 100%;
+            }
+        }
+
+        .signed-in {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 200px;
+
+            .member-avatar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .member-avatar-label {
+                    font-size: 32px;
+                    padding-bottom: 2px;
+                }
+            }
+
+            .msg {
+                font-size: 16px;
+                margin-top: 16px;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    @media screen and (min-width: 640px) {
+        .left {
+            margin-top: -25vh;
+        }
+
+        .right {
+            border-left: 2px solid;
+            border-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(226, 226, 226, 1) 50%, rgba(255, 255, 255, 0) 100%);
+            border-image-slice: 1;
+            margin-top: -25vh;
+        }
+    }
+
+    @media screen and (max-width: 640px) {
+        .right {
+            border-top: 2px solid;
+            border-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(226, 226, 226, 1) 50%, rgba(255, 255, 255, 0) 100%);
+            border-image-slice: 1;
+        }
+
+    }
+}

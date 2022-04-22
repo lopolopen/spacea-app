@@ -1,0 +1,126 @@
+@logo-size: 60px;
+
+.CardView {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -7px;
+
+    &.no-card {
+        display: block;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .card {
+        flex: 1 0 400px;
+        margin: 6px;
+
+        &.empty {
+            height: 0;
+            border: none;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .team-part-list {
+            margin: 0 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            // display: flex;
+            // align-items: center;
+            // justify-content: center;
+            line-height: 32px;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .link {
+                flex: 1 0 calc(100% - 70px);
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            .date {
+                flex: 1 0 70px;
+                color: rgba(0, 0, 0, 0.45);
+                font-size: 12px;
+            }
+        }
+    }
+
+    .ant-card-hoverable {
+        cursor: default;
+    }
+
+    .ant-card-bordered {
+        width: 400px;
+        vertical-align: bottom;
+        display: inline-block;
+
+        .ant-card-cover {
+            border-bottom: 1px solid #e8e8e8;
+            padding: 12px;
+
+            .cover {
+                height: 200px;
+            }
+        }
+
+        .ant-card-body {
+            height: 160px;
+            overflow-y: auto;
+
+            .creatorHeadPortrait {
+                width: @logo-size;
+                height: @logo-size;
+                border: 2px solid #bbbbbb;
+            }
+
+            .ant-card-meta-title {
+                font-weight: bolder;
+
+                a {
+                    color: rgba(0, 0, 0, 0.6);
+                }
+
+                a:hover {
+                    color: #40a9ff;
+                }
+            }
+
+            .ant-card-meta-description {
+                color: rgba(0, 0, 0, 0.6);
+                overflow: hidden;
+            }
+        }
+
+        .ant-card-actions {
+            li {
+                span {
+                    cursor: default !important;
+                }
+            }
+
+            li:nth-child(1) {
+                width: 15% !important;
+            }
+
+            li:nth-child(2) {
+                width: 70% !important;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            li:nth-child(3) {
+                width: 15% !important;
+
+                a {
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+}
