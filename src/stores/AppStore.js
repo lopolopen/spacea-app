@@ -11,7 +11,7 @@ import MemberClient from '../services/api/MemberClient';
 import TokenClient from '../services/api/TokenClient'
 import AccountClient from '../services/api/AccountClient';
 import MetaClient from '../services/api/MetaClient';
-import BuildInfoClient from '../services/api/BuildInfoClient';
+// import BuildInfoClient from '../services/api/BuildInfoClient';
 import { spaceaClient } from '../services/axiosConfig';
 import HistoryStore from './HistoryStore';
 import AnalysisStore from './AnalysisStore';
@@ -229,13 +229,13 @@ class AppStore {
     this.error = error;
   }
 
-  @action
-  async loadBuildInfo() {
-    let buildInfo = await BuildInfoClient.getAll();
-    runInAction(() => {
-      this.buildInfo = buildInfo;
-    });
-  }
+  // @action
+  // async loadBuildInfo() {
+  //   let buildInfo = await BuildInfoClient.getAll();
+  //   runInAction(() => {
+  //     this.buildInfo = buildInfo;
+  //   });
+  // }
 
   @action
   async loadMetas() {

@@ -3,11 +3,11 @@ import { Badge } from 'antd';
 
 const stateMap = {
   story: {
-    'new': { status: 'default', text: '新建', defReason: '新建' },
-    'active': { status: 'blue', text: '实现中', defReason: '通过审核并开始实现' },
-    'resolved': { status: 'orange', text: '已实现', defReason: '编码完成并通过单元测试' },
-    'closed': { status: 'green', text: '结束', defReason: '已上线' },
-    'removed': { status: 'red', text: '移除', defReason: '从工作积压中移除' },
+    'new': { status: 'default', text: '新建', defReason: '新建', textId: 'state_new' },
+    'active': { status: 'blue', text: '实现中', defReason: '通过审核并开始实现', textId: 'state_active' },
+    'resolved': { status: 'orange', text: '已实现', defReason: '编码完成并通过单元测试', textId: 'state_resolved' },
+    'closed': { status: 'green', text: '结束', defReason: '已上线', textId: 'state_closed' },
+    'removed': { status: 'red', text: '移除', defReason: '从工作积压中移除', textId: "state_removed" },
   },
   task: {
     'new': { status: 'default', text: '新建', defReason: '新建' },
@@ -24,9 +24,10 @@ const stateMap = {
   }
 };
 
-export default ({ type, state, ...restProps }) => {
-  let { status, text } = stateMap[type][state];
-  return <Badge status={status} text={text} {...restProps} />;
+export default ({ type, state, textFunc, ...restProps }) => {
+  let { status, text, textId } = stateMap[type][state];
+  textFunc = textFunc || (() => text);
+  return <Badge status={status} text={textFunc(textId)} {...restProps} />;
 };
 
 export { stateMap };

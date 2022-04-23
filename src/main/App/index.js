@@ -13,7 +13,7 @@ import PrivateRoute from '../../components/PrivateRoute';
 import { initInterceptors } from '../../services/axiosConfig';
 import DevErrorModal from '../common/DevErrorModal';
 import UiStateKeys from '../../stores/UiStateKeys';
-import BuildInfoClient from '../../services/api/BuildInfoClient';
+// import BuildInfoClient from '../../services/api/BuildInfoClient';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import moment from 'moment';
@@ -58,10 +58,10 @@ class AppWrapper extends Component {
   }
 }
 
+@injectIntl
 @withRouter
 @inject('appStore')
 @observer
-@injectIntl
 class App extends Component {
   state = {
     buildInfo: undefined
@@ -78,8 +78,8 @@ class App extends Component {
     let { uiStateStore } = appStore;
     uiStateStore.loadUiState();
     await appStore.signInWithToken();
-    var buildInfo = await BuildInfoClient.getAll();
-    this.setState({ buildInfo });
+    // var buildInfo = await BuildInfoClient.getAll();
+    // this.setState({ buildInfo });
   }
 
   onCollapse = collapsed => {
@@ -99,11 +99,11 @@ class App extends Component {
     ];
 
     const items2 = [
-      { title: '概要', key: 'ProjectOverview', type: 'layout', path: '/overview' },
-      { title: '工作事项', key: 'ProjectWorkItems', type: 'file-done', path: '/workitems', disabled: true },
-      { title: '工作积压', key: 'ProjectBacklogs', type: 'pushpin', path: '/teams/_default/backlogs' },
-      { title: '迭代', key: 'ProjectIterations', type: 'flag', path: '/teams/_default/iterations/_current' },
-      { title: '设置', key: 'ProjectsSettings', type: 'setting', path: '/settings' },
+      { title: intl.formatMessage({ id: "menu_overview" }), key: 'ProjectOverview', type: 'layout', path: '/overview' },
+      { title: intl.formatMessage({ id: "menu_work_items" }), key: 'ProjectWorkItems', type: 'file-done', path: '/workitems', disabled: true },
+      { title: intl.formatMessage({ id: "menu_backlogs" }), key: 'ProjectBacklogs', type: 'pushpin', path: '/teams/_default/backlogs' },
+      { title: intl.formatMessage({ id: "menu_iterations" }), key: 'ProjectIterations', type: 'flag', path: '/teams/_default/iterations/_current' },
+      { title: intl.formatMessage({ id: "menu_settings" }), key: 'ProjectsSettings', type: 'setting', path: '/settings' },
     ];
 
     let { me, uiStateStore } = appStore;

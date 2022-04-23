@@ -13,15 +13,15 @@ import './style.less';
 
 const { Search } = Input;
 
-const serviceNameMap = {
-  CopUI: 'COP UI',
-  CopApi: 'COP API',
-};
+// const serviceNameMap = {
+//   CopUI: 'COP UI',
+//   CopApi: 'COP API',
+// };
 
+@injectIntl
 @withRouter
 @inject('appStore')
 @observer
-@injectIntl
 class TopBar extends Component {
   state = {
     visible: undefined,
@@ -29,8 +29,8 @@ class TopBar extends Component {
   };
 
   async componentDidMount() {
-    const { appStore } = this.props;
-    await appStore.loadBuildInfo();
+    // const { appStore } = this.props;
+    // await appStore.loadBuildInfo();
 
     // webhookHub.on('on-mr-opened', (mr) => {
     //   appStore.todo.updateMergeRequest([mr]);
@@ -62,14 +62,9 @@ class TopBar extends Component {
     });
   }
 
-  switchLocale = () => {
+  switchLocale = (locale) => {
     let { appStore: { uiStateStore } } = this.props;
-    let cur = uiStateStore.preffered_language
-    if (cur === 'zhCN') {
-      uiStateStore.setUiState(UiStateKeys.PREFFERED_LANGUAGE, 'enUS');
-    } else {
-      uiStateStore.setUiState(UiStateKeys.PREFFERED_LANGUAGE, 'zhCN');
-    }
+    uiStateStore.setUiState(UiStateKeys.PREFFERED_LANGUAGE, locale);
   }
 
   hideDrawer = () => {
@@ -97,23 +92,24 @@ class TopBar extends Component {
     const { visible, drawer_visible } = this.state;
     let num = projects.reduce((acc, p) => acc + p.workItems.length, 0) + mergeRequests.length;
     let latestProjs = uiStateStore.latest_accessed_projects;
-    let lang = uiStateStore.preffered_language;
+
+    //TODO: refactor
     const ProjectBreadcrumb = ({ project }) => {
       if (!project) return null;
       let { id, name, teams } = project;
       const breadcrumbNameMap = new Map();
-      breadcrumbNameMap.set('/projects', '项目');
+      breadcrumbNameMap.set('/projects', intl.formatMessage({ id: 'menu_projects' }));
       breadcrumbNameMap.set(`/projects/${id}`, name);
       for (let p of latestProjs) {
         if (p.id === id) continue;
         breadcrumbNameMap.set(`/projects/${p.id}`, p.name);
       }
-      breadcrumbNameMap.set(`/projects/${id}/overview`, '概要');
-      breadcrumbNameMap.set(`/projects/${id}/workitems`, '工作事项');
-      breadcrumbNameMap.set(`/projects/${id}/teams`, '团队');
+      breadcrumbNameMap.set(`/projects/${id}/overview`, intl.formatMessage({ id: 'menu_overview' }));
+      breadcrumbNameMap.set(`/projects/${id}/workitems`, intl.formatMessage({ id: 'menu_work_items' }));
+      breadcrumbNameMap.set(`/projects/${id}/teams`, intl.formatMessage({ id: 'menu_teams' }));
       breadcrumbNameMap.set(`/projects/${id}/teams/_default`, project.defaultTeam.name);
-      breadcrumbNameMap.set(`/projects/${id}/teams/_default/backlogs`, '工作积压');
-      breadcrumbNameMap.set(`/projects/${id}/teams/_default/iterations`, '迭代');
+      breadcrumbNameMap.set(`/projects/${id}/teams/_default/backlogs`, intl.formatMessage({ id: 'menu_backlogs' }));
+      breadcrumbNameMap.set(`/projects/${id}/teams/_default/iterations`, intl.formatMessage({ id: 'menu_iterations' }));
       if (project.defaultTeam.currentIteration) {
         breadcrumbNameMap.set(`/projects/${id}/teams/_default/iterations/_current`, project.defaultTeam.currentIteration.name);
       }
@@ -122,8 +118,8 @@ class TopBar extends Component {
       }
       for (let team of teams) {
         breadcrumbNameMap.set(`/projects/${id}/teams/${team.id}`, team.name);
-        breadcrumbNameMap.set(`/projects/${id}/teams/${team.id}/backlogs`, '工作积压');
-        breadcrumbNameMap.set(`/projects/${id}/teams/${team.id}/iterations`, '迭代');
+        breadcrumbNameMap.set(`/projects/${id}/teams/${team.id}/backlogs`, intl.formatMessage({ id: 'menu_backlogs' }));
+        breadcrumbNameMap.set(`/projects/${id}/teams/${team.id}/iterations`, intl.formatMessage({ id: 'menu_iterations' }));
         if (team.currentIteration) {
           breadcrumbNameMap.set(`/projects/${id}/teams/${team.id}/iterations/_current`, team.currentIteration.name);
         }
@@ -132,14 +128,14 @@ class TopBar extends Component {
         }
       }
 
-      breadcrumbNameMap.set(`/projects/${id}/settings`, '设置');
-      breadcrumbNameMap.set(`/projects/${id}/settings/overview`, '概要');
-      breadcrumbNameMap.set(`/projects/${id}/settings/teams`, '团队');
-      breadcrumbNameMap.set(`/projects/${id}/settings/config`, '项目配置');
+      breadcrumbNameMap.set(`/projects/${id}/settings`, intl.formatMessage({ id: 'menu_settings' }));
+      breadcrumbNameMap.set(`/projects/${id}/settings/overview`, intl.formatMessage({ id: 'menu_overview' }));
+      breadcrumbNameMap.set(`/projects/${id}/settings/teams`, intl.formatMessage({ id: 'menu_teams' }));
+      breadcrumbNameMap.set(`/projects/${id}/settings/config`, intl.formatMessage({ id: 'menu_project_config' }));
       // breadcrumbNameMap.set(`/projects/${id}/settings/repos`, '代码仓库');
       for (let team of teams) {
         breadcrumbNameMap.set(`/projects/${id}/settings/teams/${team.id}`, team.name);
-        breadcrumbNameMap.set(`/projects/${id}/settings/teams/${team.id}/config`, '团队配置');
+        breadcrumbNameMap.set(`/projects/${id}/settings/teams/${team.id}/config`, intl.formatMessage({ id: 'menu_team_config' }));
       }
 
       let pathSnippets = location.pathname.split('/').filter(x => x);
@@ -268,10 +264,21 @@ class TopBar extends Component {
                         <span><FormattedMessage id='menu_profile' /></span>
                       </Link>
                     </Menu.Item>
-                    <Menu.Item onClick={this.switchLocale}>
-                      <Icon type="global" />
-                      <span><FormattedMessage id='menu_another_lang' /></span>
-                    </Menu.Item>
+                    <Menu.SubMenu title={
+                      <span>
+                        <Icon type="global" style={{ marginRight: 8 }} />
+                        <span style={{ marginRight: 8 }}><FormattedMessage id='menu_language' /></span>
+                      </span>
+                    }>
+                      <Menu.Item onClick={() => this.switchLocale('zhCN')}>
+                        <Badge color={uiStateStore.preffered_language === 'zhCN' ? '#1890ff' : '#d9d9d9'} />
+                        <FormattedMessage id='menu_chinese' />
+                      </Menu.Item>
+                      <Menu.Item onClick={() => this.switchLocale('enUS')}>
+                        <Badge color={uiStateStore.preffered_language === 'enUS' ? '#1890ff' : '#d9d9d9'} />
+                        <FormattedMessage id='menu_english' />
+                      </Menu.Item>
+                    </Menu.SubMenu>
                     <Menu.Item onClick={this.showDrawer}>
                       <Icon type="question-circle" />
                       <span><FormattedMessage id='munu_about' /></span>
@@ -297,60 +304,60 @@ class TopBar extends Component {
                 visible={drawer_visible}
                 onClose={this.hideDrawer}
               >{
-                  !buildInfo ? null :
-                    [...buildInfo.keys()].map(key => {
-                      let info = buildInfo.get(key);
-                      return (
-                        <div key={key}>
-                          <Row gutter={[16, 16]}>
-                            <Col span={12}>
-                              <Badge status={!info ? 'default' : 'green'} text={serviceNameMap[key] || key} />
-                            </Col>
-                            <Col span={12}>&nbsp;</Col>
-                          </Row>
-                          {
-                            !info ? null :
-                              <div>
-                                <Row gutter={[16, 16]}>
-                                  <Col span={12}>版本</Col>
-                                  <Col span={12}>{info.version}</Col>
-                                </Row>
-                                <Row gutter={[16, 16]}>
-                                  <Col span={12}>环境</Col>
-                                  <Col span={12}>{info.environment}</Col>
-                                </Row>
-                                <Row gutter={[16, 16]}>
-                                  <Col span={12}>构建号</Col>
-                                  <Col span={12}>{info.buildNumber}</Col>
-                                </Row>
-                                {/* <Row gutter={[16, 16]}>
-                                  <Col span={12}>分支</Col>
-                                  <Col span={12}>{info.branch}</Col>
-                                </Row> */}
-                                <Row gutter={[16, 16]}>
-                                  <Col span={12}>哈希</Col>
-                                  <Col span={12}>{info.hash}</Col>
-                                </Row>
-                                <Row gutter={[16, 16]}>
-                                  <Col span={12}>构建状态</Col>
-                                  <Col span={12}>
-                                    <a target='_blank' href={info.runUrl}>
-                                      <img src={`${info.jenkinsUrl}buildStatus/icon?job=${encodeURI(info.jobName)}`} alt='status' />
-                                    </a>
-                                  </Col>
-                                </Row>
-                              </div>
-                          }
-                          <Divider />
-                        </div>
-                      );
-                    })
+                  // !buildInfo ? null :
+                  //   [...buildInfo.keys()].map(key => {
+                  //     let info = buildInfo.get(key);
+                  //     return (
+                  //       <div key={key}>
+                  //         <Row gutter={[16, 16]}>
+                  //           <Col span={12}>
+                  //             <Badge status={!info ? 'default' : 'green'} text={serviceNameMap[key] || key} />
+                  //           </Col>
+                  //           <Col span={12}>&nbsp;</Col>
+                  //         </Row>
+                  //         {
+                  //           !info ? null :
+                  //             <div>
+                  //               <Row gutter={[16, 16]}>
+                  //                 <Col span={12}>版本</Col>
+                  //                 <Col span={12}>{info.version}</Col>
+                  //               </Row>
+                  //               <Row gutter={[16, 16]}>
+                  //                 <Col span={12}>环境</Col>
+                  //                 <Col span={12}>{info.environment}</Col>
+                  //               </Row>
+                  //               <Row gutter={[16, 16]}>
+                  //                 <Col span={12}>构建号</Col>
+                  //                 <Col span={12}>{info.buildNumber}</Col>
+                  //               </Row>
+                  //               {/* <Row gutter={[16, 16]}>
+                  //                 <Col span={12}>分支</Col>
+                  //                 <Col span={12}>{info.branch}</Col>
+                  //               </Row> */}
+                  //               <Row gutter={[16, 16]}>
+                  //                 <Col span={12}>哈希</Col>
+                  //                 <Col span={12}>{info.hash}</Col>
+                  //               </Row>
+                  //               <Row gutter={[16, 16]}>
+                  //                 <Col span={12}>构建状态</Col>
+                  //                 <Col span={12}>
+                  //                   <a target='_blank' href={info.runUrl}>
+                  //                     <img src={`${info.jenkinsUrl}buildStatus/icon?job=${encodeURI(info.jobName)}`} alt='status' />
+                  //                   </a>
+                  //                 </Col>
+                  //               </Row>
+                  //             </div>
+                  //         }
+                  //         <Divider />
+                  //       </div>
+                  //     );
+                  //   })
                 }
               </Drawer>
             </li>
           </ul>
           <Search disabled
-            placeholder="搜索"
+            placeholder={intl.formatMessage({ id: 'search' })}
             onSearch={value => console.log(value)}
             style={{ width: 240, height: 32, verticalAlign: 'middle' }} />
         </div>

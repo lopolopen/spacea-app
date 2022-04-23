@@ -13,11 +13,13 @@ import WorkItemForm from '../WorkItemForm';
 import WorkItemIcon from '../../../components/WorkItemIcon';
 import { RepoClient } from '../../../services/api/GitLabClient';
 import { defineColumns } from './columns';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import NewBranchForm from './NewBranchForm';
 
 const WappedWorkItemForm = Form.create({ name: 'work_item_form' })(WorkItemForm);
 const WappedNewBranchForm = Form.create({ name: 'new_branch_form' })(NewBranchForm);
 
+@injectIntl
 @inject('appStore')
 @observer
 class WorkItemTable extends Component {
@@ -281,7 +283,7 @@ class WorkItemTable extends Component {
       }
     }
     let columns = defineColumns.call(this)
-      .filter(c => !(excludedColumns || []).includes(c.title));
+      .filter(c => !(excludedColumns || []).includes(c.flagId));
     return (
       <div className={classNames(
         { 'WorkItemTable': true },

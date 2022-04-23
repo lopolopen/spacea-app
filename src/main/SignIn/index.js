@@ -9,10 +9,10 @@ import './style.less';
 
 const LOCAL_STORAGE_ACCOUNT_NAME = 'account_name';
 
+@injectIntl
 @withRouter
 @inject('appStore')
 @observer
-@injectIntl
 class SignInForm extends React.Component {
   state = {
     validateStatus: undefined,
@@ -102,7 +102,7 @@ class SignInForm extends React.Component {
             })(<Checkbox><FormattedMessage id='remember_me' /></Checkbox>)}
 
             <Button type="primary" htmlType="submit" className="sign-in-form-button">
-              <FormattedMessage id='login' />
+              <FormattedMessage id='sign_in' />
             </Button>
           </Form.Item>
         </Form>
@@ -140,15 +140,15 @@ class SignIn extends Component {
               <div className='signed-in'>
                 <MemberAvatar member={me} size={48} labeled />
                 <div className='msg'>
-                  <span><FormattedMessage id='signed_in_msg_1' /></span>
+                  <span><FormattedMessage id='tips_signed_in_head' /></span>
                   <a onClick={() => appStore.signOut()}>
                     <Icon style={{ color: 'red', margin: '0 4px' }} type="logout" />
                   </a>
-                  <span><FormattedMessage id='signed_in_msg_2' /></span>
+                  <span><FormattedMessage id='tips_signed_in_body' /></span>
                   <Link to='/'>
                     <Icon style={{ margin: '0 4px' }} type="login" />
                   </Link>
-                  <span><FormattedMessage id='signed_in_msg_3' /></span>
+                  <span><FormattedMessage id='tips_signed_in_tail' /></span>
                 </div>
               </div>
           }

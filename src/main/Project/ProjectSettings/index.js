@@ -8,11 +8,13 @@ import TeamConfig from './TeamConfig';
 import ProjectConfig from './ProjectConfig';
 import ReposSetting from './ReposSetting';
 import { inject, observer } from 'mobx-react';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import './style.less'
 
 const { Sider, Content } = Layout;
 const bgColor = 'white';
 
+@injectIntl
 @inject('appStore')
 @observer
 class ProjectsSettings extends Component {
@@ -21,17 +23,18 @@ class ProjectsSettings extends Component {
   }
 
   render() {
-    const { project } = this.props.appStore;
+    const { appStore, intl } = this.props;
+    const { project } = appStore;
     if (!project || !project.id) return null;
     let { selectedTeamId: teamId } = project;
     const items = [
-      { title: '概要', key: 'OverviewSetting', type: 'layout', path: '/overview' },
-      { title: '团队', key: 'TeamsSetting', type: 'team', path: '/teams' },
+      { title: intl.formatMessage({ id: "menu_overview" }), key: 'OverviewSetting', type: 'layout', path: '/overview' },
+      { title: intl.formatMessage({ id: "menu_teams" }), key: 'TeamsSetting', type: 'team', path: '/teams' },
       { key: 'divider1', __: '__' },
       // { title: '迭代', key: 'sprints', type: 'sync', path: '/sprints' },
       // { title: '文件夹', key: 'FoldersSetting', type: 'folder', path: '/folders' },
-      { title: '项目配置', key: 'ProjectConfig', path: '/config' },
-      { title: '团队配置', key: 'TeamConfig', path: `/teams/${teamId}/config` },
+      { title: intl.formatMessage({ id: "menu_project_config" }), key: 'ProjectConfig', path: '/config' },
+      { title: intl.formatMessage({ id: "menu_team_config" }), key: 'TeamConfig', path: `/teams/${teamId}/config` },
       { key: 'divider2', __: '__' },
       // { title: '代码仓库', key: 'ReposSetting', type: 'gitlab', path: '/repos' },
       // { title: '工作流', key: 'WorkflowSetting', type: 'retweet', path: '/workflow' },

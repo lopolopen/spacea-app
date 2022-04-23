@@ -13,9 +13,11 @@ import { WorkItem } from '../../../stores/WorkItemStore';
 import UiStateKeys from '../../../stores/UiStateKeys';
 import PlanningPanel from './PlanningPanel';
 import WorkItemTable from '../../common/WorkItemTable';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import './style.less';
 
 @Form.create()
+@injectIntl
 @inject('appStore')
 @observer
 class ProjectBacklogs extends Component {
@@ -124,7 +126,7 @@ class ProjectBacklogs extends Component {
 
   render() {
     // console.log(this.constructor.name, 'render()');
-    const { appStore } = this.props;
+    const { appStore, intl } = this.props;
     const { workItemStore, project, me, uiStateStore } = appStore;
     if (!project) return null;
     let { teams, selectedTeam, selectedTeamId } = project;
@@ -148,11 +150,11 @@ class ProjectBacklogs extends Component {
                 <Menu onClick={null} selectedKeys={['all']} mode='horizontal'>
                   <Menu.Item key='all'>
                     <Icon type='pushpin' theme='filled' />
-                    所有积压
+                    <FormattedMessage id='menu_all_backlogs' />
                   </Menu.Item>
                   <Menu.Item disabled key='recycle'>
                     <Icon type='rest' theme='filled' />
-                    回收站
+                    <FormattedMessage id='menu_recycle_bin' />
                   </Menu.Item>
                 </Menu>
               </div>
@@ -163,10 +165,10 @@ class ProjectBacklogs extends Component {
                       teams.map(({ id, name, members }) => (
                         <Menu.Item key={id} className={classNames({ 'selected': id === selectedTeamId })}>
                           <Link to={`/projects/${project.id}/teams/${id}/backlogs`}>
-                            <Badge color={id === selectedTeamId ? '#1890ff' : '#d9d9d9'} text={`${name} 团队`} />
+                            <Badge color={id === selectedTeamId ? '#1890ff' : '#d9d9d9'} text={`${name} ${intl.formatMessage({ id: 'team' })}`} />
                             {
                               members && members.some(m => m.id === me.id) ?
-                                <Tag style={{ float: 'right', marginLeft: 16 }} color={'#1890ff'}>{'我的'}</Tag>
+                                <Tag style={{ float: 'right', marginLeft: 16 }} color={'#1890ff'}>{intl.formatMessage({ id: 'mine' })}</Tag>
                                 :
                                 null
                             }
@@ -178,7 +180,7 @@ class ProjectBacklogs extends Component {
                 )} trigger={['click']}>
                   <div>
                     <Icon type='team' style={{ marginRight: 4 }} />
-                    {`${selectedTeam.name} 团队`}
+                    {`${selectedTeam.name} ${intl.formatMessage({ id: 'team' })}`}
                     <Icon style={{ paddingLeft: '4px' }} type='down' />
                   </div>
                 </Dropdown>
@@ -213,24 +215,24 @@ class ProjectBacklogs extends Component {
                   {
                     <Button type='primary'>
                       <Icon type='plus' />
-                      新建事项
+                      <FormattedMessage id='btn_new_work_item' />
                       <Icon type='down' />
                     </Button>
                   }
                 </Dropdown >
-                <Tooltip title='全部展开'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_expand_all' })}>
                   <a disabled={usingFilter} className='toggle icon-btn' style={{ marginLeft: 8 }}>
                     <Icon onClick={this.expandAll} className='icon-btn-icon' type='plus-square' />
                   </a>
                 </Tooltip>
-                <Tooltip title='全部收缩'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_shrink_all' })}>
                   <a disabled={usingFilter} className='toggle icon-btn'>
                     <Icon onClick={this.shrinkAll} className='icon-btn-icon' type='minus-square' />
                   </a>
                 </Tooltip>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Tooltip title='刷新'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_refresh' })}>
                   <a className='icon-btn' style={{ marginRight: 16 }}>
                     <Icon onClick={this.refresh} className='icon-btn-icon' type='reload' spin={loading} />
                   </a>
@@ -280,18 +282,18 @@ class ProjectBacklogs extends Component {
                     />
                   </div>
                 } trigger='click' placement='bottom'>
-                  <Tooltip title='控制面板'>
+                  <Tooltip title={intl.formatMessage({ id: 'tips_control_panel' })}>
                     <a className='icon-btn' style={{ marginRight: 16 }}>
                       <Icon className='icon-btn-icon' type='control' />
                     </a>
                   </Tooltip>
                 </Popover>
-                <Tooltip title='取消过滤'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_clear_filter' })}>
                   <a disabled={!usingFilter} className='icon-btn' style={{ marginRight: 16 }}>
                     <Icon onClick={this.cancelFilter} className='icon-btn-icon' type='filter' theme='filled' />
                   </a>
                 </Tooltip>
-                <Tooltip title={panelVisible ? '关闭规划面板' : '打开规划面板'}>
+                <Tooltip title={intl.formatMessage({ id: 'tips_plan_panel' })}>
                   <a className='icon-btn' style={{ marginRight: 16 }} onClick={this.togglePanel}>
                     <Icon type='schedule'
                       className={classNames(
@@ -302,8 +304,8 @@ class ProjectBacklogs extends Component {
                   </a>
                 </Tooltip>
                 <Radio.Group value={'tableView'}>
-                  <Radio.Button value='tableView'>表格视图</Radio.Button>
-                  <Radio.Button disabled value='boardView'>看板视图</Radio.Button>
+                  <Radio.Button value='tableView'><FormattedMessage id='view_table' /></Radio.Button>
+                  <Radio.Button disabled value='boardView'><FormattedMessage id='view_kanban' /></Radio.Button>
                 </Radio.Group>
               </div>
             </div>
@@ -324,7 +326,7 @@ class ProjectBacklogs extends Component {
             }}>
               <WorkItemTable
                 ref={ref => this.tableRef = ref}
-                excludedColumns={['剩余工时', '文件夹']}
+                excludedColumns={['rh', 'f']}
               />
               {
                 !panelVisible ? null :

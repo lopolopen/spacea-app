@@ -88,7 +88,6 @@ let MemberAvatar = ({ member, size, labeled, labelOnly, antiCache, ...restProps 
     acronym = acronym || ming.charAt(ming.length - 1);
   }
   else {
-    debugger
     name = `${firstName || ''} ${lastName || ''}`;
     acronym = acronym || `${firstName ? firstName.charAt(0) : ''}${lastName ? lastName.charAt(0) : ''}`.toUpperCase()
   }

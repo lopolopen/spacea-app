@@ -17,9 +17,11 @@ import { WorkItem } from '../../../stores/WorkItemStore';
 import AnalysisPanel from './AnalysisPanel';
 import UiStateKeys from '../../../stores/UiStateKeys';
 import WorkItemTable from '../../common/WorkItemTable';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import './style.less';
 
 @Form.create()
+@injectIntl
 @withRouter
 @inject('appStore')
 @observer
@@ -144,7 +146,7 @@ class ProjectIterations extends Component {
 
   render() {
     // console.log(this.constructor.name, 'render()');
-    const { appStore } = this.props;
+    const { appStore, intl } = this.props;
     const { workItemStore, project, me, uiStateStore } = appStore;
     if (!project) return null;
     let {
@@ -158,9 +160,9 @@ class ProjectIterations extends Component {
     let panelVisible = uiStateStore.analysis_panel_visiable;
     let location = uiStateStore.insert_location_iteration;
     let iterationTagMap = {
-      'past': '过去',
-      'current': '当前',
-      'future': '未来'
+      'past': intl.formatMessage({ id: 'passed' }),
+      'current': intl.formatMessage({ id: 'current' }),
+      'future': intl.formatMessage({ id: 'future' }),
     };
     const {
       usingFilter
@@ -179,11 +181,11 @@ class ProjectIterations extends Component {
                 <Menu onClick={null} selectedKeys={['all']} mode='horizontal'>
                   <Menu.Item key='all'>
                     <Icon type='pushpin' theme='filled' />
-                    当前积压
+                    <FormattedMessage id='menu_current_backlogs' />
                   </Menu.Item>
                   <Menu.Item disabled key='recycle'>
                     <Icon type='rest' theme='filled' />
-                    回收站
+                    <FormattedMessage id='menu_recycle_bin' />
                   </Menu.Item>
                 </Menu>
               </div>
@@ -249,10 +251,10 @@ class ProjectIterations extends Component {
                       teams.map(({ id, name, members }) => (
                         <Menu.Item key={id} className={classNames({ 'selected': id === selectedTeamId })}>
                           <Link to={`/projects/${project.id}/teams/${id}/iterations/_current`}>
-                            <Badge color={id === selectedTeamId ? '#1890ff' : '#d9d9d9'} text={`${name} 团队`} />
+                            <Badge color={id === selectedTeamId ? '#1890ff' : '#d9d9d9'} text={`${name} ${intl.formatMessage({ id: 'team' })}`} />
                             {
                               members && members.some(m => m.id === me.id) ?
-                                <Tag style={{ float: 'right', marginLeft: 16 }} color={'#1890ff'}>{'我的'}</Tag>
+                                <Tag style={{ float: 'right', marginLeft: 16 }} color={'#1890ff'}>{intl.formatMessage({ id: 'mine' })}</Tag>
                                 :
                                 null
                             }
@@ -264,7 +266,7 @@ class ProjectIterations extends Component {
                 )} trigger={['click']}>
                   <div>
                     <Icon type='team' style={{ marginRight: 4 }} />
-                    {`${selectedTeam.name} 团队`}
+                    {`${selectedTeam.name} ${intl.formatMessage({ id: 'team' })}`}
                     <Icon style={{ paddingLeft: '4px' }} type='down' />
                   </div>
                 </Dropdown>
@@ -277,7 +279,7 @@ class ProjectIterations extends Component {
                         cookedIterations.map(({ id, name, tag }) => (
                           <Menu.Item key={id} className={classNames({ 'selected': id === selectedIterationId })}>
                             <Link to={`/projects/${project.id}/teams/${selectedTeamId}/iterations/${id}`}>
-                              <Badge color={id === selectedIterationId ? '#1890ff' : '#d9d9d9'} text={`迭代 ${name}`} />
+                              <Badge color={id === selectedIterationId ? '#1890ff' : '#d9d9d9'} text={`${intl.formatMessage({ id: 'iteration' })} ${name}`} />
                               {
                                 id &&
                                 <Tag style={{ float: 'right', marginLeft: 16 }} color={tag === 'current' ? '#1890ff' : '#d9d9d9'}>
@@ -292,7 +294,7 @@ class ProjectIterations extends Component {
                   )} trigger={['click']}>
                   <div>
                     <Icon type='flag' style={{ marginRight: 4 }} />
-                    {`迭代 ${selectedIteration ? selectedIteration.name : '无'}`}
+                    {`${intl.formatMessage({ id: 'iteration' })} ${selectedIteration ? selectedIteration.name : '无'}`}
                     <Icon style={{ paddingLeft: '4px' }} type='down' />
                   </div>
                 </Dropdown>
@@ -327,24 +329,24 @@ class ProjectIterations extends Component {
                   {
                     <Button type='primary'>
                       <Icon type='plus' />
-                      新建事项
+                      <FormattedMessage id='btn_new_work_item' />
                       <Icon type='down' />
                     </Button>
                   }
                 </Dropdown >
-                <Tooltip title='全部展开'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_expand_all' })}>
                   <a disabled={usingFilter} className='toggle icon-btn' style={{ marginLeft: 8 }}>
                     <Icon onClick={this.expandAll} className='icon-btn-icon' type='plus-square' />
                   </a>
                 </Tooltip>
-                <Tooltip title='全部收缩'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_shrink_all' })}>
                   <a disabled={usingFilter} className='toggle icon-btn'>
                     <Icon onClick={this.shrinkAll} className='icon-btn-icon' type='minus-square' />
                   </a>
                 </Tooltip>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Tooltip title='刷新'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_refresh' })}>
                   <a className='icon-btn' style={{ marginRight: 16 }}>
                     <Icon onClick={this.refresh} className='icon-btn-icon' type='reload' spin={loading} />
                   </a>
@@ -392,18 +394,18 @@ class ProjectIterations extends Component {
                     />
                   </div>
                 } trigger='click' placement='bottom'>
-                  <Tooltip title='控制面板'>
+                  <Tooltip title={intl.formatMessage({ id: 'tips_control_panel' })}>
                     <a className='icon-btn' style={{ marginRight: 16 }}>
                       <Icon className='icon-btn-icon' type='control' />
                     </a>
                   </Tooltip>
                 </Popover>
-                <Tooltip title='取消过滤'>
+                <Tooltip title={intl.formatMessage({ id: 'tips_clear_filter' })}>
                   <a disabled={!usingFilter} className='icon-btn' style={{ marginRight: 16 }}>
                     <Icon onClick={this.cancelFilter} className='icon-btn-icon' type='filter' theme='filled' />
                   </a>
                 </Tooltip>
-                <Tooltip title={panelVisible ? '关闭分析面板' : '打开分析面板'}>
+                <Tooltip title={intl.formatMessage({ id: 'tips_analysis_panel' })}>
                   <a className='icon-btn' style={{ marginRight: 16 }} onClick={this.togglePanel}>
                     <Icon type='area-chart'
                       className={classNames(
@@ -414,8 +416,8 @@ class ProjectIterations extends Component {
                   </a>
                 </Tooltip>
                 <Radio.Group value={'tableView'}>
-                  <Radio.Button value='tableView'>表格视图</Radio.Button>
-                  <Radio.Button disabled value='boardView'>看板视图</Radio.Button>
+                  <Radio.Button value='tableView'><FormattedMessage id='view_table' /></Radio.Button>
+                  <Radio.Button disabled value='boardView'><FormattedMessage id='view_kanban' /></Radio.Button>
                 </Radio.Group>
               </div>
             </div>
@@ -442,7 +444,7 @@ class ProjectIterations extends Component {
               }}>
                 <WorkItemTable
                   ref={ref => this.tableRef = ref}
-                  excludedColumns={['迭代']}
+                  excludedColumns={['i']}
                 />
                 {
                   !panelVisible ? null :

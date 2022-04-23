@@ -17,7 +17,7 @@ const { Option, OptGroup } = Select;
 
 function defineColumns() {
 
-  const { appStore } = this.props;
+  const { appStore, intl } = this.props;
   const { project, workItemStore, analysisStore } = appStore;
   if (!project) return null;
   let { selectedTeam } = project;
@@ -137,7 +137,7 @@ function defineColumns() {
         return types.map(t => {
           return {
             value: t,
-            text: <WorkItemIcon type={t} labeled />
+            text: <WorkItemIcon type={t} textFunc={(id) => intl.formatMessage({ id })} labeled />
           }
         });
       }
@@ -244,7 +244,7 @@ function defineColumns() {
       )
     },
     {
-      title: '标题',
+      title: intl.formatMessage({ id: 'column_title' }),
       dataIndex: 'title',
       filteredValue: filters.title || null,
       ...this.getColumnSearchProps('title'),
@@ -305,7 +305,7 @@ function defineColumns() {
                               )
                               }
                             >
-                              <WorkItemIcon type={type} labeled />
+                              <WorkItemIcon type={type} textFunc={(id) => intl.formatMessage({ id })} labeled />
                             </Menu.Item>
                           ))
                         }
@@ -319,22 +319,18 @@ function defineColumns() {
       }
     },
     {
-      title: '类型',
+      title: intl.formatMessage({ id: 'column_type' }),
       dataIndex: 'type',
       filteredValue: filters.type || null,
       filters: this.getFilters('type'),
       onFilter: (value, { type }) => value === type,
       render: (type) => {
-        let map = {
-          story: '故事',
-          task: '任务',
-          bug: 'Bug',
-        };
-        return map[type];
+        let item = typeMap[type]
+        return intl.formatMessage({ id: item.textId })
       }
     },
     {
-      title: '状态',
+      title: intl.formatMessage({ id: 'column_state' }),
       dataIndex: 'state',
       filters: this.getFilters('state'),
       filteredValue: filters.state || null,
@@ -366,7 +362,7 @@ function defineColumns() {
             {
               Object.keys(stateMap[type]).map(s =>
                 <Option key={s} value={s}>
-                  <StateBadge state={s} type={type} />
+                  <StateBadge state={s} type={type} textFunc={(id) => intl.formatMessage({ id })} />
                 </Option>
               )
             }
@@ -375,7 +371,7 @@ function defineColumns() {
       }
     },
     {
-      title: '优先级',
+      title: intl.formatMessage({ id: 'column_priority' }),
       dataIndex: 'priority',
       filteredValue: filters.priority || null,
       filters: this.getFilters('priority'),
@@ -403,7 +399,7 @@ function defineColumns() {
       }
     },
     {
-      title: '分配给',
+      title: intl.formatMessage({ id: 'column_assigned_to' }),
       dataIndex: 'assigneeId',
       filteredValue: filters.assigneeId || null,
       filters: this.getFilters('assigneeId'),
@@ -459,7 +455,7 @@ function defineColumns() {
       }
     },
     {
-      title: '剩余工时',
+      title: intl.formatMessage({ id: 'column_remaining_hours' }),
       render: (record) => {
         let remain_rec = (workItem) => {
           let { remainingHours, type, state, children } = workItem;
@@ -480,30 +476,33 @@ function defineColumns() {
         };
         let remainingHours = remain_rec(record);
         return remainingHours;
-      }
+      },
+      flagId: 'rh'
     },
     {
-      title: '迭代',
+      title: intl.formatMessage({ id: 'column_iteration' }),
       dataIndex: 'iterationId',
       render: (iterationId) => {
         const { appStore: { project: { iterations } } } = this.props;
         if (!iterations) return null;
         let iteration = iterations.find(i => i.id === iterationId);
         return iteration && <Path path={iteration.path} icon='flag' />
-      }
+      },
+      flagId: 'i'
     },
     {
-      title: '文件夹',
+      title: intl.formatMessage({ id: 'column_folder' }),
       dataIndex: 'folderId',
       render: (folderId) => {
         const { appStore: { project: { folders } } } = this.props;
         if (!folders) return null;
         let folder = folders.find(f => f.id === folderId);
         return folder && <Path path={folder.path} icon='folder' />
-      }
+      },
+      flagId: 'f'
     },
     {
-      title: '创建人',
+      title: intl.formatMessage({ id: 'column_created_by' }),
       dataIndex: 'creator',
       filteredValue: filters.creator || null,
       filters: this.getFilters('creator'),
@@ -518,7 +517,7 @@ function defineColumns() {
     //   render: (parentId) => parentId || '无'
     // },
     {
-      title: '标签',
+      title: intl.formatMessage({ id: 'column_tags' }),
       dataIndex: 'tags',
       filteredValue: filters.tags || null,
       filters: this.getFilters('tags'),
@@ -541,7 +540,7 @@ function defineColumns() {
       }
     },
     {
-      title: '操作',
+      title: intl.formatMessage({ id: 'column_created_by' }),
       key: 'action',
       render: (record) => (
         <Operations

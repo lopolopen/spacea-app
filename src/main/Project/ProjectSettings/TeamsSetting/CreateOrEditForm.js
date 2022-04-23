@@ -72,7 +72,6 @@ class CreateOrEditForm extends Component {
                         members: appStore.members || []
                       }
                     ].map(({ id: gid, name, members }) => {
-                      debugger
                       let idSetOfGroup = new Set(members.filter(m => !m.disabled).map(m => m.id));
                       return (
                         <OptGroup label={<Checkbox

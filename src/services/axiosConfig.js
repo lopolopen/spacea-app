@@ -4,7 +4,8 @@ import TokenClient from './api/TokenClient';
 import _ from 'lodash';
 
 const REACT_APP_ENV = process.env.REACT_APP_ENV;
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = window._env_.REACT_APP_API_BASE_URL || process.env.REACT_APP_API_BASE_URL;
+
 
 let isRefreshing = false;
 let queue401 = [];

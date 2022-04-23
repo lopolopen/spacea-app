@@ -10,9 +10,9 @@ import './style.less';
 
 const WappedCreateForm = Form.create({ name: 'create_form' })(NewProjectForm);
 
+@injectIntl
 @inject('appStore')
 @observer
-@injectIntl
 class Projects extends Component {
   formRef;
   state = {
@@ -133,7 +133,7 @@ class Projects extends Component {
                   <FormattedMessage id='menu_latest_visited' />
                 </Menu.Item>
                 <Menu.Item key='all' onClick={() => this.setProjectsMenuKey('all')}>
-                  <FormattedMessage id='menu_all' />
+                  <FormattedMessage id='menu_all_projects' />
                 </Menu.Item>
                 <Menu.Item disabled key='watched'>
                   <Icon type="star" theme="filled" />
@@ -160,8 +160,12 @@ class Projects extends Component {
                 <FormattedMessage id='btn_new_project' />
               </Button>
               <Radio.Group value={'card'}>
-                <Radio.Button value='card'>卡片视图</Radio.Button>
-                <Radio.Button disabled value='list'>列表视图</Radio.Button>
+                <Radio.Button value='card'>
+                  <FormattedMessage id='view_card' />
+                </Radio.Button>
+                <Radio.Button disabled value='list'>
+                  <FormattedMessage id='view_list' />
+                </Radio.Button>
               </Radio.Group>
             </div>
           </div>

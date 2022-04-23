@@ -9,6 +9,9 @@ import StateBadge from '../../../../components/StateBadge';
 import WorkItemIcon from '../../../../components/WorkItemIcon';
 import { Link } from 'react-router-dom';
 
+import { injectIntl, FormattedMessage } from 'react-intl';
+
+@injectIntl
 @inject('appStore')
 @observer
 class TodoPanel extends Component {
@@ -40,7 +43,8 @@ class TodoPanel extends Component {
   render() {
     let { loading, key } = this.state;
     const {
-      appStore: { todoStore, workItemStore }
+      appStore: { todoStore, workItemStore },
+      intl
     } = this.props;
     let groupedWorkItems = loading ? [] : todoStore.groupedWorkItems;
     let mergeRequests = [];
@@ -53,7 +57,7 @@ class TodoPanel extends Component {
           </Tabs.TabPane> */}
           <Tabs.TabPane tab={
             <span>
-              <span>分配给我</span>
+              <span><FormattedMessage id='menu_assigned_to_me' /></span>
               {
                 key !== 'tome' ? null :
                   <span style={{ color: '#FFA39E', fontWeight: 'bolder', marginLeft: 4 }}>
@@ -110,7 +114,7 @@ class TodoPanel extends Component {
           </Tabs.TabPane>
           <Tabs.TabPane tab={
             <span>
-              <span>我创建的</span>
+              <span><FormattedMessage id='menu_created_by_me' /></span>
               {
                 key !== 'byme' ? null :
                   <span style={{ color: '#A7E8B4', fontWeight: 'bolder', marginLeft: 4 }}>
@@ -164,7 +168,7 @@ class TodoPanel extends Component {
                   </div>
             }
           </Tabs.TabPane>
-          <Tabs.TabPane tab='合并请求' key='mr' disabled>
+          {/* <Tabs.TabPane tab='合并请求' key='mr' disabled>
             {
               mergeRequests.length > 0 ?
                 <div className='scroll-list'>{
@@ -175,7 +179,7 @@ class TodoPanel extends Component {
                       mr => {
                         return (
                           <List.Item>
-                            <a target='_blank' href={mr.url}>测试MR</a>
+                            <a target='_blank' href={mr.url}>MR</a>
                           </List.Item>
                         )
                       }}
@@ -184,8 +188,8 @@ class TodoPanel extends Component {
                 :
                 <Empty />
             }
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='关注' key='fav' disabled>
+          </Tabs.TabPane> */}
+          <Tabs.TabPane tab={intl.formatMessage({ id: 'menu_watched' })} key='fav' disabled>
             <Empty />
           </Tabs.TabPane>
         </Tabs>

@@ -9,21 +9,13 @@ import ProjectsSetting from './ProjectsSetting';
 import MembersSetting from './MembersSetting';
 import IntegrationSetting from './IntegrationSetting';
 import { inject, observer } from 'mobx-react';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import './style.less'
 
 const { Sider, Content } = Layout;
-
-const items = [
-  { title: '系统', key: 'SystemSetting', type: 'tool', path: '/system' },
-  { title: '用户信息', key: 'ProfileSetting', type: 'profile', path: '/profile' },
-  { title: '访问令牌', key: 'AccessTokenSetting', type: 'safety-certificate', path: '/accesstoken' },
-  { title: '项目管理', key: 'ProjectsSetting', type: 'project', path: '/projects' },
-  { title: '用户管理', key: 'MembersSetting', type: 'user', path: '/members' },
-  // { title: '集成', key: 'IntegrationSetting', type: 'deployment-unit', path: '/integration' }
-]
-
 const bgColor = 'white';
 
+@injectIntl
 @inject('appStore')
 @observer
 class Settings extends Component {
@@ -33,6 +25,17 @@ class Settings extends Component {
   }
 
   render() {
+    const { intl } = this.props;
+
+    const items = [
+      { title: intl.formatMessage({ id: "menu_system" }), key: 'SystemSetting', type: 'tool', path: '/system' },
+      { title: intl.formatMessage({ id: "menu_profile" }), key: 'ProfileSetting', type: 'profile', path: '/profile' },
+      { title: intl.formatMessage({ id: "manu_access_token" }), key: 'AccessTokenSetting', type: 'safety-certificate', path: '/accesstoken' },
+      { title: intl.formatMessage({ id: "menu_projects" }), key: 'ProjectsSetting', type: 'project', path: '/projects' },
+      { title: intl.formatMessage({ id: "menu_users" }), key: 'MembersSetting', type: 'user', path: '/members' },
+      // { title: '集成', key: 'IntegrationSetting', type: 'deployment-unit', path: '/integration' }
+    ]
+
     let base = '/settings';
     return (
       <div className='Setting'>
