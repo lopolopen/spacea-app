@@ -14,6 +14,13 @@ RUN yarn install && yarn run build
 
 FROM base AS final
 WORKDIR /usr/share/nginx/html
+
 RUN rm -rf ./*
 COPY --from=build /app/build .
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+COPY [".env", ".env"]
+COPY ["env.sh", "env.sh"]
+RUN chmod +x env.sh
+
+# ENTRYPOINT ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
