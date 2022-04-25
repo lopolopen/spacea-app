@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from 'react';
+import React, { Component, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { autorun } from 'mobx';
@@ -16,10 +16,11 @@ import WorkItemTable from '../../common/WorkItemTable';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import './style.less';
 
-@Form.create()
 @injectIntl
+@Form.create()
 @inject('appStore')
 @observer
+
 class ProjectBacklogs extends Component {
   state = {
     expandedRowKeys: [],
@@ -193,20 +194,23 @@ class ProjectBacklogs extends Component {
                     {
                       Object.keys(typeMap).map(type => (
                         <Menu.Item key={type}
-                          onClick={() => this.tableRef && this.tableRef.showWorkItemModel(
-                            new WorkItem({
-                              type,
-                              state: 'new',
-                              reason: '新建',
-                              priority: 'normal',
-                              //TODO:
-                              folder: defaultFolder,
-                              folderId: defaultFolder.id,
-                              iterationId: defaultIteration.id,
-                            }, appStore))
+                          onClick={() => {
+                            debugger
+                            this.tableRef && this.tableRef.showWorkItemModel(
+                              new WorkItem({
+                                type,
+                                state: 'new',
+                                reason: '新建',
+                                priority: 'normal',
+                                //TODO:
+                                folder: defaultFolder,
+                                folderId: defaultFolder.id,
+                                iterationId: defaultIteration.id,
+                              }, appStore))
+                          }
                           }
                         >
-                          <WorkItemIcon type={type} labeled />
+                          <WorkItemIcon type={type} textFunc={(id) => intl.formatMessage({ id })} labeled />
                         </Menu.Item>
                       ))
                     }

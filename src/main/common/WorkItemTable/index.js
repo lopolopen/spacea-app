@@ -19,7 +19,7 @@ import NewBranchForm from './NewBranchForm';
 const WappedWorkItemForm = Form.create({ name: 'work_item_form' })(WorkItemForm);
 const WappedNewBranchForm = Form.create({ name: 'new_branch_form' })(NewBranchForm);
 
-@injectIntl
+
 @inject('appStore')
 @observer
 class WorkItemTable extends Component {
@@ -464,4 +464,4 @@ class WorkItemTable extends Component {
   }
 }
 
-export default WorkItemTable;
+export default injectIntl(WorkItemTable, { forwardRef: true });
