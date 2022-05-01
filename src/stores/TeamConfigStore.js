@@ -143,9 +143,8 @@ class TeamConfigStore {
     let newFolderObj = await project.client.createFolderForTeam(this.currentTeamId, folderObj);
     var newFolder = new Folder(newFolderObj);
     runInAction(() => {
-      let { project, project: { folders } } = this.appStore;
+      let { project: { folders } } = this.appStore;
       folders.push(newFolder);
-      project.folderTree = TreeNode.treelize(folders);
       this.currentTeam.folders = update(
         this.currentTeam.folders || [], {
         $push: [newFolder]

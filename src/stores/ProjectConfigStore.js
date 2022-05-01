@@ -16,9 +16,8 @@ class ProjectConfigStore {
     let newFolderObj = await project.client.createFolder(folderObj);
     var newFolder = new Folder(newFolderObj);
     runInAction(() => {
-      let { project, project: { folders } } = this.appStore;
+      let { project: { folders } } = this.appStore;
       folders.push(newFolder);
-      project.folderTree = TreeNode.treelize(folders);
     });
   }
 
@@ -36,7 +35,7 @@ class ProjectConfigStore {
   @action
   async updateFolder(folderId, folderObj, current) {
     await FolderClient.update(folderId, folderObj);
-    let { project, project: { folders } } = this.appStore;
+    let { project: { folders } } = this.appStore;
     let folder = folders.find(f => f.id === folderId);
     runInAction(() => {
       let originalPath = folder.path;
@@ -44,7 +43,6 @@ class ProjectConfigStore {
       this.updateChildPath(current, originalPath, newPath);
       folder.setName(folderObj.name);
       folder.path = folderObj.path;
-      project.folderTree = TreeNode.treelize(folders);
     });
   }
 
@@ -92,7 +90,6 @@ class ProjectConfigStore {
     let { project, project: { folders } } = this.appStore;
     runInAction(() => {
       project.folders = folders.filter(f => !(f.id === folder.id || f.path.startsWith(`${folder.path}/`)));
-      project.folderTree = TreeNode.treelize(project.folders);
     });
   }
 
