@@ -29,7 +29,7 @@ class Settings extends Component {
 
     const items = [
       { title: intl.formatMessage({ id: "menu_system" }), key: 'SystemSetting', type: 'tool', path: '/system' },
-      { title: intl.formatMessage({ id: "menu_profile" }), key: 'ProfileSetting', type: 'profile', path: '/profile' },
+      { title: intl.formatMessage({ id: "menu_my_profile" }), key: 'ProfileSetting', type: 'profile', path: '/profile' },
       { title: intl.formatMessage({ id: "manu_access_token" }), key: 'AccessTokenSetting', type: 'safety-certificate', path: '/accesstoken' },
       { title: intl.formatMessage({ id: "menu_projects" }), key: 'ProjectsSetting', type: 'project', path: '/projects' },
       { title: intl.formatMessage({ id: "menu_users" }), key: 'MembersSetting', type: 'user', path: '/members' },

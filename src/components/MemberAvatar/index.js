@@ -3,7 +3,7 @@ import { Avatar, Icon } from 'antd';
 import utility from '../../utility';
 import { Member } from '../../stores/MemberStore';
 
-const PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL;
+const REACT_APP_PUB_BASE_URL = window._env_.REACT_APP_PUB_BASE_URL || process.env.REACT_APP_PUB_BASE_URL;
 
 function getFullName(member) {
   let { xing, ming, firstName, lastName } = member;
@@ -17,26 +17,24 @@ function getFullName(member) {
   return name;
 }
 
-let Me = ({ size, labeled, ...restProps }) => (
+let Me = ({ labeled, textFunc, ...restProps }) => (
   <span {...restProps}>
-    <Avatar style={{ background: 'white', border: '1px solid #888888' }} size={size} title={'自己'}>
-      <span style={{ color: '#888888' }}>{'我'}</span>
-    </Avatar>
+    <MemberAvatar labeled={false} {...restProps} />
     {
-      labeled ? <span style={{ marginLeft: 6 }}>自己</span> : null
+      labeled ? <span style={{ marginLeft: 6 }}>{textFunc && textFunc('myselft')}</span> : null
     }
   </span >
 );
 
-let Null = ({ size, labeled, ...restProps }) => (
+let Null = ({ size, labeled, textFunc, ...restProps }) => (
   <span {...restProps}>
-    <Avatar style={{ background: '#ccc' }} size={size} title='未分配'>
+    <Avatar style={{ background: '#ccc' }} size={size} title={textFunc && textFunc('unassigned')}>
       <span style={{ color: 'white' }}>
         <Icon type='user' />
       </span>
     </Avatar>
     {
-      labeled ? <span style={{ marginLeft: 6 }}>未分配</span> : null
+      labeled ? <span style={{ marginLeft: 6 }}>{textFunc && textFunc('unassigned')}</span> : null
     }
   </span >
 );
@@ -56,7 +54,7 @@ let Outsider = ({ size, labeled, label, ...restProps }) => (
 
 let MemberAvatar = ({ member, size, labeled, labelOnly, antiCache, ...restProps }) => {
   if (!member || member.id === null || member.id === undefined) {
-    return <Null size={size} labeled={labeled} />
+    return <Null size={size} labeled={labeled} {...restProps} />
   }
 
   if (!member.avatar) {
@@ -71,7 +69,7 @@ let MemberAvatar = ({ member, size, labeled, labelOnly, antiCache, ...restProps 
       if (antiCache) {
         url = `${url}?u=${uid}`;
       }
-      url = `${PUBLIC_URL}${url}`;
+      url = `${REACT_APP_PUB_BASE_URL}${url}`;
     }
     hashColor = '#ccc';
   }

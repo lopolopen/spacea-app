@@ -37,12 +37,12 @@ class OverviewSetting extends Component {
     e.preventDefault();
     this.setState({ saving: true });
     const { appStore, form } = this.props;
-    form.validateFields(async (err, { name, desc, avatar }) => {
+    form.validateFields(async (err, { name, description, avatar }) => {
       try {
         if (err) return;
         await appStore.updateProject({
           name,
-          desc,
+          description,
         }, avatar);
         message.success(`项目 ${name} 更新成功`);
         this.setState({ saving: false });
@@ -56,7 +56,7 @@ class OverviewSetting extends Component {
   render() {
     const { project } = this.props.appStore;
     if (!project || !project.id) return null;
-    let { name, desc, avatar } = project;
+    let { name, description, avatar } = project;
     if (!name) return null;
     const {
       getFieldDecorator,
@@ -86,8 +86,8 @@ class OverviewSetting extends Component {
               <div className='label'>描述</div>
               <Form.Item>
                 {
-                  getFieldDecorator('desc', {
-                    initialValue: desc,
+                  getFieldDecorator('description', {
+                    initialValue: description,
                     rules: [{ max: 250, message: '项目描述不能超过250个字符' }],
                   })(<TextArea rows={5} placeholder='项目描述' />)
                 }

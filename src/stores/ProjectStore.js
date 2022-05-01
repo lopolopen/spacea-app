@@ -10,7 +10,7 @@ import { Team } from './TeamStore';
 class Project {
   id;
   @observable name;
-  @observable desc;
+  @observable description;
   @observable avatarUrl = null;
   @observable avatarUid = null;
   createdDate;
@@ -58,7 +58,7 @@ class Project {
     let project = await ProjectClient.single(this.id);
     const {
       name,
-      desc,
+      description,
       avatarUrl,
       avatarUid,
       defaultTeamId,
@@ -71,7 +71,7 @@ class Project {
     } = project;
     runInAction(() => {
       this.name = name;
-      this.desc = desc;
+      this.description = description;
       this.avatarUrl = avatarUrl;
       this.avatarUid = avatarUid;
       this.defaultTeamId = defaultTeamId;
@@ -143,10 +143,10 @@ class Project {
 
   @action
   selectIteration(iterationId) {
-    if (iterationId === '_current') {
+    if (isNaN(iterationId)) {
       this._selectedIterationId = undefined;
     } else {
-      this._selectedIterationId = iterationId;
+      this._selectedIterationId = parseInt(iterationId);
     }
   }
 
@@ -247,7 +247,7 @@ class Project {
         this.teams = update(this.teams, {
           [index]: {
             name: { $set: team.name },
-            desc: { $set: team.desc },
+            description: { $set: team.description },
             acronym: { $set: team.acronym },
           }
         })
@@ -305,7 +305,7 @@ class ProjectStore {
       this.projects = update(this.projects, {
         [index]: {
           name: { $set: project.name },
-          desc: { $set: project.desc }
+          description: { $set: project.description }
         }
       });
     }

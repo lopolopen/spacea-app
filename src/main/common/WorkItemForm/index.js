@@ -23,7 +23,7 @@ import 'braft-editor/dist/index.css'
 import './style.less';
 
 const { Option, OptGroup } = Select;
-const htmlFields = ['desc', 'reproSteps', 'acceptCriteria'];
+const htmlFields = ['description', 'reproSteps', 'acceptCriteria'];
 const specialFields = ['attachments'];
 
 const controls = [
@@ -163,7 +163,7 @@ class WorkItemForm extends Component {
   resetTemplate(temp) {
     const { setFieldsValue } = this.props.form;
     setFieldsValue({
-      desc: BraftEditor.createEditorState(temp)
+      description: BraftEditor.createEditorState(temp)
     });
   }
 
@@ -240,7 +240,7 @@ class WorkItemForm extends Component {
       completedHours,
       environment,
       severity,
-      desc,
+      description,
       acceptCriteria,
       changedDate,
       changer,
@@ -536,7 +536,7 @@ class WorkItemForm extends Component {
                 <Row>
                   <Col span={18}>
                     <div className='collapse-left'>
-                      <Collapse defaultActiveKey={['desc', 'acceptCriteria', 'reproSteps']} expandIconPosition='right'>
+                      <Collapse defaultActiveKey={['description', 'acceptCriteria', 'reproSteps']} expandIconPosition='right'>
                         {
                           type !== 'bug' ? null :
                             <Collapse.Panel header='重现步骤' key='reproSteps'>
@@ -555,11 +555,11 @@ class WorkItemForm extends Component {
                             </Collapse.Panel>
                         }
                         {
-                          <Collapse.Panel header='描述' key='desc'>
+                          <Collapse.Panel header='描述' key='description'>
                             <Form.Item>
                               {
-                                getFieldDecorator('desc', {
-                                  initialValue: BraftEditor.createEditorState(desc)
+                                getFieldDecorator('description', {
+                                  initialValue: BraftEditor.createEditorState(description)
                                 })(
                                   <BraftEditor
                                     controls={controls}

@@ -84,7 +84,7 @@ const fieldMap = {
     transfer: htmlTransfer,
     isHtml: true
   },
-  desc: {
+  description: {
     label: '描述',
     transfer: htmlTransfer,
     isHtml: true

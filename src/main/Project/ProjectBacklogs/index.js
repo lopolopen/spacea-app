@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component, forwardRef } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { autorun } from 'mobx';
@@ -195,7 +195,6 @@ class ProjectBacklogs extends Component {
                       Object.keys(typeMap).map(type => (
                         <Menu.Item key={type}
                           onClick={() => {
-                            debugger
                             this.tableRef && this.tableRef.showWorkItemModel(
                               new WorkItem({
                                 type,
@@ -210,7 +209,7 @@ class ProjectBacklogs extends Component {
                           }
                           }
                         >
-                          <WorkItemIcon type={type} textFunc={(id) => intl.formatMessage({ id })} labeled />
+                          <WorkItemIcon type={type} textFunc={id => intl.formatMessage({ id })} labeled />
                         </Menu.Item>
                       ))
                     }

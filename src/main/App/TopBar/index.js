@@ -261,7 +261,7 @@ class TopBar extends Component {
                     <Menu.Item>
                       <Link to='/settings/profile'>
                         <Icon type="profile" style={{ marginRight: 8 }} />
-                        <span><FormattedMessage id='menu_profile' /></span>
+                        <span><FormattedMessage id='menu_my_profile' /></span>
                       </Link>
                     </Menu.Item>
                     <Menu.SubMenu title={

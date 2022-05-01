@@ -9,7 +9,7 @@ import MinioUserClient from '../services/api/MinioUserClient';
 class Service {
   id;
   @observable name;
-  @observable desc;
+  @observable description;
   @observable creator;
   @observable minioUsers = [];
   @observable apiKeys = [];

@@ -158,12 +158,12 @@ class AppStore {
   async updateProject(project, avatar) {
     await this.project.client.update({
       name: project.name,
-      desc: project.desc
+      description: project.description
     });
     runInAction(() => {
       this.project = update(this.project, {
         name: { $set: project.name },
-        desc: { $set: project.desc }
+        description: { $set: project.description }
       });
     });
     if (avatar && avatar.uid !== this.project.avatarUid) {

@@ -43,14 +43,14 @@ class ProjectsSetting extends Component {
       },
       {
         title: '描述',
-        dataIndex: 'desc',
-        render: desc => (
+        dataIndex: 'description',
+        render: description => (
           <span style={{
             display: 'inline-block',
             maxWidth: 400,
             overflow: 'hidden',
             textOverflow: 'ellipsis'
-          }} title={desc}>{desc}</span>)
+          }} title={description}>{description}</span>)
       },
       // {
       //   title: '标签',
@@ -120,7 +120,7 @@ class ProjectsSetting extends Component {
     const { appStore: { projectStore } } = this.props;
     let { form } = this.editFormRef.props;
     let { project } = this.state;
-    form.validateFields(async (err, { name, desc }) => {
+    form.validateFields(async (err, { name, description }) => {
       try {
         if (err) return;
         this.setState({
@@ -128,11 +128,11 @@ class ProjectsSetting extends Component {
         });
         await project.client.update({
           name,
-          desc
+          description
         });
         projectStore.update(project.id, {
           name,
-          desc
+          description
         })
         this.handleEditCancel();
         form.resetFields();

@@ -3,7 +3,7 @@ import { message } from 'antd';
 import TokenClient from './api/TokenClient';
 import _ from 'lodash';
 
-const REACT_APP_ENV = process.env.REACT_APP_ENV;
+const ENV = window._env_.REACT_APP_ENV || process.env.REACT_APP_ENV;
 const API_BASE_URL = window._env_.REACT_APP_API_BASE_URL || process.env.REACT_APP_API_BASE_URL;
 
 
@@ -50,7 +50,7 @@ const initInterceptors = (appStore, history) => {
         return res.data;
       }, async err => {
         let { response, message: msg } = err;
-        if (REACT_APP_ENV === 'Development') {
+        if (ENV === 'Development') {
           if (response && response.status === 500) {
             appStore.setError(err);
             throw err;

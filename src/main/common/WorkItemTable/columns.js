@@ -137,7 +137,7 @@ function defineColumns() {
         return types.map(t => {
           return {
             value: t,
-            text: <WorkItemIcon type={t} textFunc={(id) => intl.formatMessage({ id })} labeled />
+            text: <WorkItemIcon type={t} textFunc={id => intl.formatMessage({ id })} labeled />
           }
         });
       }
@@ -168,16 +168,16 @@ function defineColumns() {
           .map(id => ({
             value: id || 0,
             text: memberMap.has(id) ?
-              <MemberAvatar member={memberMap.get(id)} size={'small'} labeled /> :
+              <MemberAvatar member={memberMap.get(id)} size={'small'} textFunc={id => intl.formatMessage({ id })} labeled /> :
               <MemberAvatar.Outsider size={'small'} label={id} labeled />
           }));
         return [{
           value: me.id || '?',
-          text: <MemberAvatar.Me size={'small'} labeled />
+          text: <MemberAvatar.Me member={me} size={'small'} textFunc={id => intl.formatMessage({ id })} labeled />
         }, {
           //内部会调用value.toString()，所以不能为null
           value: 0,
-          text: <MemberAvatar.Null size={'small'} labeled />
+          text: <MemberAvatar.Null size={'small'} textFunc={id => intl.formatMessage({ id })} labeled />
         },
         ...filters];
       }
@@ -195,7 +195,7 @@ function defineColumns() {
         }));
         return [{
           value: me.id || '?',
-          text: <MemberAvatar.Me size={'small'} labeled />
+          text: <MemberAvatar.Me member={me} size={'small'} textFunc={id => intl.formatMessage({ id })} labeled />
         },
         ...filters];
       }
@@ -305,7 +305,7 @@ function defineColumns() {
                               )
                               }
                             >
-                              <WorkItemIcon type={type} textFunc={(id) => intl.formatMessage({ id })} labeled />
+                              <WorkItemIcon type={type} textFunc={id => intl.formatMessage({ id })} labeled />
                             </Menu.Item>
                           ))
                         }
@@ -326,7 +326,7 @@ function defineColumns() {
       onFilter: (value, { type }) => value === type,
       render: (type) => {
         let item = typeMap[type]
-        return intl.formatMessage({ id: item.textId })
+        return intl.formatMessage({ id: item.text })
       }
     },
     {
@@ -362,7 +362,7 @@ function defineColumns() {
             {
               Object.keys(stateMap[type]).map(s =>
                 <Option key={s} value={s}>
-                  <StateBadge state={s} type={type} textFunc={(id) => intl.formatMessage({ id })} />
+                  <StateBadge state={s} type={type} textFunc={id => intl.formatMessage({ id })} />
                 </Option>
               )
             }
@@ -425,7 +425,7 @@ function defineColumns() {
           >
             {
               <Option key={null} value={null} label={'未分配'}>
-                <MemberAvatar member={{ id: null }} size={'small'} labeled />
+                <MemberAvatar.Null size={'small'} textFunc={id => intl.formatMessage({ id })} labeled />
               </Option>
             }
             {
@@ -540,7 +540,7 @@ function defineColumns() {
       }
     },
     {
-      title: intl.formatMessage({ id: 'column_created_by' }),
+      title: '',
       key: 'action',
       render: (record) => (
         <Operations

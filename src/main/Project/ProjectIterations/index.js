@@ -320,7 +320,7 @@ class ProjectIterations extends Component {
                             }, appStore))
                           }
                         >
-                          <WorkItemIcon type={type} textFunc={(id) => intl.formatMessage({ id })} labeled />
+                          <WorkItemIcon type={type} textFunc={id => intl.formatMessage({ id })} labeled />
                         </Menu.Item>
                       ))
                     }

@@ -5,7 +5,7 @@ import { Iteration } from './TreeNode';
 class Team {
   id;
   @observable name;
-  @observable desc;
+  @observable description;
   @observable acronym;
   @observable iterationIds = [];
   project;

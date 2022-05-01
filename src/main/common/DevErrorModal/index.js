@@ -12,7 +12,6 @@ class DevErrorModal extends Component {
     let { visible } = this.state;
     let { error } = this.props;
     if (!error || !error.response) return null;
-    debugger
     return (
       <Modal className='DevErrorModal'
         title={<span className='title'><Icon type="close-circle" />{`Code ${error.response.status}: ${error.response.statusText}`}</span>}

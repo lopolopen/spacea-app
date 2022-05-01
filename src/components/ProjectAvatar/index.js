@@ -3,7 +3,7 @@ import { Avatar } from 'antd';
 import utility from '../../utility';
 import { Project } from '../../stores/ProjectStore';
 
-const PUBLIC_UR = process.env.REACT_APP_PUBLIC_URL;
+const REACT_APP_PUB_BASE_URL =window._env_.REACT_APP_PUB_BASE_URL || process.env.REACT_APP_PUB_BASE_URL;
 
 let ProjectAvatar = ({ project, size, labeled, labelOnly, antiCache, ...restProps }) => {
   if (!project || !project.id) return null;
@@ -20,7 +20,7 @@ let ProjectAvatar = ({ project, size, labeled, labelOnly, antiCache, ...restProp
       if (antiCache) {
         url = `${url}?u=${uid}`
       }
-      url = `${PUBLIC_UR}${url}`;
+      url = `${REACT_APP_PUB_BASE_URL}${url}`;
     }
     hashColor = '#0000';
   }

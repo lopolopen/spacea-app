@@ -12,7 +12,7 @@ class WorkItem {
   @observable rev;
   @observable title;
   type;
-  @observable desc;
+  @observable description;
 
   @observable acceptCriteria;
   @observable reproSteps;
@@ -69,7 +69,7 @@ class WorkItem {
     this.loading = true;
     let detail = await this.client.getDetails();
     runInAction(() => {
-      this.desc = detail.desc;
+      this.description = detail.description;
       this.acceptCriteria = detail.acceptCriteria;
       this.reproSteps = detail.reproSteps;
       this.attachments = detail.attachments;
@@ -179,7 +179,7 @@ class WorkItem {
   }
 
   // @computed get descHtml() {
-  //   return BraftEditor.createEditorState(this.desc).toHTML();
+  //   return BraftEditor.createEditorState(this.description).toHTML();
   // }
 
   // @computed get acceptCriteriaHtml() {
@@ -381,10 +381,10 @@ class WorkItemStore {
   async saveWorkItem(values) {
     let { me } = this.appStore;
     let workItem = this.workItem;
-    let { desc, acceptCriteria, reproSteps, attachments, ...rest } = values;
+    let { description, acceptCriteria, reproSteps, attachments, ...rest } = values;
     let newWorkItem = {
       ...rest,
-      desc: desc && desc.toHTML(),
+      description: description && description.toHTML(),
       reproSteps: reproSteps && reproSteps.toHTML(),
       acceptCriteria: acceptCriteria && acceptCriteria.toHTML(),
       tags: workItem.tags,
@@ -392,7 +392,7 @@ class WorkItemStore {
       type: workItem.type,
     };
     if (newWorkItem.environment === '') newWorkItem.environment = undefined;
-    if (newWorkItem.desc === '<p></p>') newWorkItem.desc = undefined;
+    if (newWorkItem.description === '<p></p>') newWorkItem.description = undefined;
     if (newWorkItem.reproSteps === '<p></p>') newWorkItem.reproSteps = undefined;
     if (newWorkItem.acceptCriteria === '<p></p>') newWorkItem.acceptCriteria = undefined;
     //新建事项
@@ -502,7 +502,7 @@ class WorkItemStore {
       this.workItem.environment = workItem.environment;
       this.workItem.severity = workItem.severity;
       this.workItem.tags = workItem.tags;
-      this.workItem.desc = workItem.desc;
+      this.workItem.description = workItem.description;
       this.workItem.reproSteps = workItem.reproSteps;
       this.workItem.acceptCriteria = workItem.acceptCriteria;
       this.workItem.reproSteps = workItem.reproSteps;

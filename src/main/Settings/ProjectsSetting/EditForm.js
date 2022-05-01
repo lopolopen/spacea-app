@@ -40,8 +40,8 @@ class EditForm extends Component {
             <div className='label'>描述</div>
             <Form.Item>
               {
-                getFieldDecorator('desc', {
-                  initialValue: project.desc,
+                getFieldDecorator('description', {
+                  initialValue: project.description,
                   rules: [{ max: 250, message: '项目描述不能超过250个字符' }],
                 })(<TextArea rows={5} placeholder='项目描述' />)
               }

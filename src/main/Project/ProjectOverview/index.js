@@ -15,7 +15,7 @@ class ProjectOverview extends Component {
       <div className='ProjectOverview'>
         {/* <div className='projectCover'><img alt={project.name} src={project.cover} /></div> */}
         <span className='projectName'>{project.name}</span>
-        <div className='projectDescribe'>{project.desc}</div>
+        <div className='projectDescribe'>{project.description}</div>
         {/* <div className='projectMembers'>
           {project.members.map((member, key) => {
             const { firstName, lastName } = member;

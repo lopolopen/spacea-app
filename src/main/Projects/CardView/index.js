@@ -19,10 +19,10 @@ export default class CardView extends Component {
         projects = [];
       }
       else {
-        projects = projects.filter(({ name, desc }) => {
+        projects = projects.filter(({ name, description }) => {
           for (let key of keys) {
             if (name.toLowerCase().includes(key.toLowerCase())) return true;
-            if (desc && desc.toLowerCase().includes(key.toLowerCase())) return true;
+            if (description && description.toLowerCase().includes(key.toLowerCase())) return true;
           }
           return false;
         })
@@ -39,9 +39,13 @@ export default class CardView extends Component {
             <div style={{ textAlign: 'center', padding: '40px 0', background: '#fff' }} >
               <Spin />
             </div> :
-            !hasProjects ? <Empty style={{ background: '#fff' }} /> :
+            !hasProjects ?
+              <div style={{ background: '#fff', padding: 16 }}>
+                <Empty />
+              </div>
+              :
               projects.map(project => {
-                let { id, name, desc, createdDate, owner, members } = project;
+                let { id, name, description, createdDate, owner, members } = project;
                 return (
                   <Card className='card'
                     key={id}
@@ -95,7 +99,7 @@ export default class CardView extends Component {
                           highlightStyle={{ backgroundColor: '#ffc069' }}
                           searchWords={keys || []}
                           autoEscape
-                          textToHighlight={desc || ''}
+                          textToHighlight={description || ''}
                         />
                       }
                     />

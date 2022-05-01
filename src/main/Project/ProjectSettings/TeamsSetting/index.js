@@ -65,7 +65,7 @@ class TeamsSetting extends Component {
     },
     {
       title: '描述',
-      dataIndex: 'desc',
+      dataIndex: 'description',
     },
     {
       title: '操作',
@@ -128,7 +128,7 @@ class TeamsSetting extends Component {
   handleOk = (team, isEditing) => {
     const { appStore: { project } } = this.props;
     let { form } = this.formRef.props;
-    form.validateFields(async (err, { name, memberIds, acronym, desc }) => {
+    form.validateFields(async (err, { name, memberIds, acronym, description }) => {
       try {
         if (err) return;
         this.setState({
@@ -139,7 +139,7 @@ class TeamsSetting extends Component {
             name,
             memberIds,
             acronym,
-            desc
+            description
           });
           message.success(`团队 ${name} 更新成功`);
         } else {
@@ -147,7 +147,7 @@ class TeamsSetting extends Component {
             name,
             memberIds,
             acronym,
-            desc
+            description
           });
           message.success(`团队 ${name} 创建成功`);
         }

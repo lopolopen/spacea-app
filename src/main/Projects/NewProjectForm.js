@@ -78,7 +78,7 @@ class NewProjectForm extends Component {
           <label>描述</label>
           <Form.Item>
             {
-              getFieldDecorator('desc', {
+              getFieldDecorator('description', {
                 initialValue: null,
                 rules: [{ max: 250, message: '项目描述不能超过250个字符' }]
               })(<TextArea rows={5} placeholder='项目描述' />)
