@@ -18,7 +18,6 @@ class Project {
   @observable teams;
   @observable members = [];
   @observable folders;
-  // @observable folderTree;
   @observable iterations;
   @observable defaultTeamId;
   @observable rootFolderId;
@@ -78,7 +77,6 @@ class Project {
       this.rootFolderId = rootFolderId;
       this.rootIterationId = rootIterationId;
       this.folders = folders.map(f => new Folder(f));
-      // this.folderTree = TreeNode.treelize(this.folders);
       this.teams = teams.map(t => new Team({ ...t, project: this }));
       this.owner = owner;
       this.iterations = iterations.map(i => new Iteration(i));
