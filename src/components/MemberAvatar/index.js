@@ -26,7 +26,7 @@ let Me = ({ labeled, textFunc, ...restProps }) => (
   </span >
 );
 
-let Null = ({ size, labeled, textFunc, ...restProps }) => (
+let Null = ({ size, labeled, labelOnly, textFunc, ...restProps }) => (
   <span {...restProps}>
     <Avatar style={{ background: '#ccc' }} size={size} title={textFunc && textFunc('unassigned')}>
       <span style={{ color: 'white' }}>
@@ -39,7 +39,7 @@ let Null = ({ size, labeled, textFunc, ...restProps }) => (
   </span >
 );
 
-let Outsider = ({ size, labeled, label, ...restProps }) => (
+let Outsider = ({ size, labeled, label, textFunc, ...restProps }) => (
   <span {...restProps}>
     <Avatar style={{ background: '#ccc' }} size={size} title='非团队成员'>
       <span style={{ color: 'white' }}>
@@ -52,9 +52,9 @@ let Outsider = ({ size, labeled, label, ...restProps }) => (
   </span >
 );
 
-let MemberAvatar = ({ member, size, labeled, labelOnly, antiCache, ...restProps }) => {
+let MemberAvatar = ({ member, size, labeled, labelOnly, antiCache, textFunc, ...restProps }) => {
   if (!member || member.id === null || member.id === undefined) {
-    return <Null size={size} labeled={labeled} {...restProps} />
+    return <Null size={size} labeled={labeled} labelOnly={labelOnly} textFunc={textFunc}  {...restProps} />
   }
 
   if (!member.avatar) {

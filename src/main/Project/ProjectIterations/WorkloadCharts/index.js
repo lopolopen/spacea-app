@@ -5,12 +5,14 @@ import { Avatar, Divider } from 'antd';
 import { Chart } from '@antv/g2';
 import MemberAvatar from '../../../../components/MemberAvatar';
 import utility from '../../../../utility';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 const CHART_CONT_ID_PREFIX = 'workload-chart-container';
 
 // const eazy = x => x * 0.5;
 // const heavy = x => x * 1;
 
+@injectIntl
 @inject('appStore')
 class WorkloadCharts extends Component {
 
@@ -29,7 +31,7 @@ class WorkloadCharts extends Component {
 
   render() {
     let { workloads } = this.state;
-    let { appStore } = this.props;
+    let { appStore, intl } = this.props;
     let {
       teamConfigStore,
       project
@@ -41,13 +43,13 @@ class WorkloadCharts extends Component {
       return (
         <div style={{ margin: '20px 8px' }}>
           < div style={{ fontSize: 20, padding: 32 }}>
-            <div>此迭代没有设置生产工时</div>
+            <div><FormattedMessage id='tips_no_capacity_settings' /></div>
             <Link to={`${base}/settings/teams/${selectedTeam.id}/config#capacity`}
               onClick={() => {
                 teamConfigStore.setCurrentIteration(selectedIteration)
               }}
             >
-              去设置
+              <FormattedMessage id='tips_jump_to_settings' />
             </Link>
           </div>
         </div>
@@ -71,7 +73,7 @@ class WorkloadCharts extends Component {
             {name[0]}
           </Avatar>
           <span>{name}</span>
-          <span>{`（${teamWorkload.assignedCapacity}/${teamWorkload.capacity} 小时）`}</span>
+          <span>{`（${teamWorkload.assignedCapacity}/${teamWorkload.capacity} ${intl.formatMessage({ id: 'hours' })}）`}</span>
         </div>
         <WorkloadChart type='by-team' workload={teamWorkload} />
         <Divider />
@@ -81,13 +83,13 @@ class WorkloadCharts extends Component {
             return (
               <div key={wl.ownerId} style={{ marginTop: 20 }}>
                 <div style={{ marginBottom: 4 }}>
-                  <MemberAvatar size='small' labeled member={assignee} />
+                  <MemberAvatar size='small' labeled member={assignee} textFunc={id => intl.formatMessage({ id })} />
                   <span>
                     {
                       wl.ownerId ?
-                        `（${wl.assignedCapacity}/${wl.capacity} 小时）`
+                        `（${wl.assignedCapacity}/${wl.capacity} ${intl.formatMessage({ id: 'hours' })}）`
                         :
-                        `（${wl.assignedCapacity} 小时）`
+                        `（${wl.assignedCapacity} ${intl.formatMessage({ id: 'hours' })}）`
                     }
                   </span>
                 </div>
@@ -198,10 +200,12 @@ class WorkloadChart extends Component {
       workload: wl
     } = this.props;
     up = up || wl;
-    let max = Math.max(up.assignedCapacity || 0, up.capacity || 0);
-    let max2 = Math.max(wl.assignedCapacity || 0, wl.capacity || 0);
+    //上界值
+    let upperMax = Math.max(up.assignedCapacity || 0, up.capacity || 0);
+    //成员值
+    let memberMax = Math.max(wl.assignedCapacity || 0, wl.capacity || 0);
     return (
-      <div style={{ width: `${max2 / max * 100}%` }}>
+      <div style={{ width: `${memberMax / upperMax * 100}%` }}>
         <div id={this.getContainerId()} />
       </div>
     );

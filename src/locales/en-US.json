@@ -79,6 +79,9 @@
   "type_story": "Story",
   "type_task": "Task",
   "type_bug": "Bug",
+  "ideal_trend": "Ideal Trend",
+  "remaining_hours": "Remaining Hours",
+  "remaning_capacity": "Remaining Capacity",
   "state_new": "New",
   "state_removed": "Removed",
   "state_story_active": "Active",
@@ -88,5 +91,11 @@
   "state_task_closed": "Closed",
   "state_bug_active": "Active",
   "state_bug_resolved": "Resolved",
-  "state_bug_closed": "Closed"
+  "state_bug_closed": "Closed",
+  "tips_no_capacity_settings": "There is no capacity settings in this iteration.",
+  "tips_jump_to_settings": "Just to settings.",
+  "hours": "Hours",
+  "before": "Before",
+  "after": "After",
+  "btn_overwrite": "Overwrite"
 }
