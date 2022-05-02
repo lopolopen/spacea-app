@@ -77,11 +77,11 @@ class WorkloadCharts extends Component {
         <Divider />
         {
           memberWorkloads.map(wl => {
-            let assigne = selectedTeam.members.find(m => m.id === wl.ownerId);
+            let assignee = selectedTeam.members.find(m => m.id === wl.ownerId);
             return (
               <div key={wl.ownerId} style={{ marginTop: 20 }}>
                 <div style={{ marginBottom: 4 }}>
-                  <MemberAvatar size='small' labeled member={assigne} />
+                  <MemberAvatar size='small' labeled member={assignee} />
                   <span>
                     {
                       wl.ownerId ?

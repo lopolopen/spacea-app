@@ -90,9 +90,10 @@ class TeamConfigStore {
     if (!this.currentTeamId) return;
     var client = new TeamClient(this.currentTeamId);
     await client.selectIteration(iteration.id);
+    let { iterations } = this.currentTeam;
     runInAction(() => {
       this.currentTeam.iterations = update(
-        this.currentTeam.iterations || [], {
+        iterations || [], {
         $push: [iteration]
       });
       this.currentTeam.cookedIterations = Iteration.cook(this.currentTeam.iterations);

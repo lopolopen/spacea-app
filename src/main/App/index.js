@@ -102,7 +102,7 @@ class App extends Component {
       { title: intl.formatMessage({ id: "menu_overview" }), key: 'ProjectOverview', type: 'layout', path: '/overview' },
       { title: intl.formatMessage({ id: "menu_work_items" }), key: 'ProjectWorkItems', type: 'file-done', path: '/workitems', disabled: true },
       { title: intl.formatMessage({ id: "menu_backlogs" }), key: 'ProjectBacklogs', type: 'pushpin', path: '/teams/_default/backlogs' },
-      { title: intl.formatMessage({ id: "menu_iterations" }), key: 'ProjectIterations', type: 'flag', path: '/teams/_default/iterations/_current' },
+      { title: intl.formatMessage({ id: "menu_iterations" }), key: 'ProjectIterations', type: 'retweet', path: '/teams/_default/iterations/_current' },
       { title: intl.formatMessage({ id: "menu_settings" }), key: 'ProjectsSettings', type: 'setting', path: '/settings' },
     ];
 

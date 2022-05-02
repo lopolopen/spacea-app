@@ -69,7 +69,7 @@ class TeamConfig extends Component {
           <TabPane
             tab={
               <span>
-                <Icon type='flag' />
+                <Icon type='retweet' />
                 迭代
               </span>
             }

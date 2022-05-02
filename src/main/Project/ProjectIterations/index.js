@@ -293,7 +293,7 @@ class ProjectIterations extends Component {
                     </Menu>
                   )} trigger={['click']}>
                   <div>
-                    <Icon type='flag' style={{ marginRight: 4 }} />
+                    <Icon type='retweet' style={{ marginRight: 4 }} />
                     {`${intl.formatMessage({ id: 'iteration' })} ${selectedIteration ? selectedIteration.name : '无'}`}
                     <Icon style={{ paddingLeft: '4px' }} type='down' />
                   </div>

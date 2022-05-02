@@ -486,7 +486,7 @@ function defineColumns() {
         const { appStore: { project: { iterations } } } = this.props;
         if (!iterations) return null;
         let iteration = iterations.find(i => i.id === iterationId);
-        return iteration && <Path path={iteration.path} icon='flag' />
+        return iteration && <Path path={iteration.path} icon='retweet' />
       },
       flagId: 'i'
     },

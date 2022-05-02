@@ -100,7 +100,7 @@ class AnalysisPanel extends Component {
                           }}
                         >
                           <Button type='primary' style={{ margin: '0 12px 8px 0' }}>
-                            <Icon type='retweet' />
+                            <Icon type='scissor' />
                             覆盖统计
                         </Button>
                         </Popconfirm>
