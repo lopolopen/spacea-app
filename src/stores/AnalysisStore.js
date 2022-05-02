@@ -5,6 +5,8 @@ import AnalysisClient from '../services/api/AnalysisClient';
 import { typeMap } from '../components/WorkItemIcon';
 import utility from '../utility';
 
+const format = 'YYYY-M-D';
+
 class BurndownRecord {
   type;
   typeName;
@@ -14,7 +16,7 @@ class BurndownRecord {
   constructor(options) {
     this.type = options.workItemType;
     this.typeName = options.typeName;
-    this.date = moment(options.accountingDate).format('YYYY-M-D');
+    this.date = moment(options.accountingDate).format(format);
     this.remainingHours = options.remainingHours;
   }
 }
@@ -43,7 +45,7 @@ class AnalysisStore {
       trend.push({
         type: 'remainingCapacity',
         typeName: intl.formatMessage({ id: 'remaning_capacity' }),
-        date: dates[i].format('YYYY-M-D'),
+        date: dates[i].format(format),
         remainingHours: (workdays - j) * capacityPerDay
       });
     }
@@ -62,7 +64,7 @@ class AnalysisStore {
       trend.push({
         type: 'idealTrend',
         typeName: intl.formatMessage({ id: 'ideal_trend' }),
-        date: dates[i].format('YYYY-M-D'),
+        date: dates[i].format(format),
         remainingHours: parseFloat((init - init * j / workdays).toFixed(1))
       });
 
@@ -102,7 +104,7 @@ class AnalysisStore {
       //当已存档的最后日期为“前天”时（即daily job跑完之前），修正“凌晨真空期” #50830
       //daily job可能由于某种原因没有触发或执行失败，导致“今天”的数据一直没生成，所以需要给修正逻辑一个最后期限
       if (today.diff(latestDate, 'days') === 2 && moment().hour() < 6) {
-        pointObjs.forEach(p => p.accountingDate = yesterday.format('YYYY-M-D'));
+        pointObjs.forEach(p => p.accountingDate = yesterday.format(format));
         today = yesterday;
       }
     } else {
@@ -111,7 +113,7 @@ class AnalysisStore {
     let records = [...recordObjs, ...pointObjs].map(r => new BurndownRecord(r));
     let map = new Map(records.map(r => [
       //开始之前的数据作为开始前一天来计算
-      `${r.type}-${moment(r.date) < theDayBefore ? theDayBefore.format('YYYY-M-D') : r.date}`,
+      `${r.type}-${moment(r.date) < theDayBefore ? theDayBefore.format(format) : r.date}`,
       r.remainingHours
     ]));
     //顺序决定燃尽图中task和bug的上下关系
@@ -122,12 +124,12 @@ class AnalysisStore {
       .map(i => start.clone().add(i - 1, 'days'));
     let saturdays = dates
       .filter(date => date.day() === 6)
-      .map(date => date.format('YYYY-M-D'));
+      .map(date => date.format(format));
     let sundays =
       dates.filter(date => date.day() === 0)
-        .map(date => date.format('YYYY-M-D'));
+        .map(date => date.format(format));
     let burndownTrend = dates.concat(today > end ? [today] : [])
-      .map(date => date.format('YYYY-M-D'))
+      .map(date => date.format(format))
       .flatMap(accountingDate => types.map(type => new BurndownRecord({
         workItemType: type,
         typeName: intl.formatMessage({ id: typeMap[type].text }),
@@ -141,7 +143,7 @@ class AnalysisStore {
         r.remainingHours = remainingHours || 0;
       }
       if (date > end) {
-        r.date = theDayAfter.format('YYYY-M-D');
+        r.date = theDayAfter.format(format);
       }
       // //开始前一天的工作量作为初始值（来计算理想趋势）
       // if (start.diff(date, 'days') === 1) {
@@ -156,13 +158,13 @@ class AnalysisStore {
       idealTrend.push({
         type: 'idealTrend',
         typeName: intl.formatMessage({ id: 'ideal_trend' }),
-        date: theDayAfter.format('YYYY-M-D'),
+        date: theDayAfter.format(format),
         remainingHours: 0
       });
       capacityTrend.push({
         type: 'remainingCapacity',
         typeName: intl.formatMessage({ id: 'remaning_capacity' }),
-        date: theDayAfter.format('YYYY-M-D'),
+        date: theDayAfter.format(format),
         remainingHours: 0
       });
     }

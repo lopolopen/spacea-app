@@ -47,6 +47,10 @@ class Project {
     return this.id && new ProjectClient(this.id);
   }
 
+  @computed get folderMap() {
+    return new Map((this.folders || []).map(f => [f.id, f]));
+  }
+
   @computed get iterationMap() {
     return new Map((this.iterations || []).map(i => [i.id, i]));
   }

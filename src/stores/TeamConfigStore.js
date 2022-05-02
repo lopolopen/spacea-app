@@ -53,11 +53,11 @@ class TeamConfigStore {
     let { folders } = this.appStore.project;
     var client = new TeamClient(this.currentTeamId);
     await client.updateDefaultFolder(folderId);
-    let folder = folders.find(f => f.id === folderId);
+    // let folder = folders.find(f => f.id === folderId);
     runInAction(() => {
-      this.currentTeam.folders = update(
-        this.currentTeam.folders || [], {
-        $push: [folder]
+      this.currentTeam.folderIds = update(
+        this.currentTeam.folderIds || [], {
+        $push: [folderId]
       });
       this.currentTeam.defaultFolder = folders.find(f => f.id === folderId);
     });
@@ -73,14 +73,14 @@ class TeamConfigStore {
     if (!this.currentTeamId) return;
     var client = new TeamClient(this.currentTeamId);
     await client.selectFolder(folder.id);
-    let { defaultFolder, folders } = this.currentTeam;
+    let { defaultFolder, folderIds } = this.currentTeam;
     runInAction(() => {
       if (!defaultFolder) {
         this.currentTeam.defaultFolder = folder;
       }
-      this.currentTeam.folders = update(
-        folders || [], {
-        $push: [folder]
+      this.currentTeam.folderIds = update(
+        folderIds || [], {
+        $push: [folder.id]
       });
     });
   }
@@ -90,13 +90,12 @@ class TeamConfigStore {
     if (!this.currentTeamId) return;
     var client = new TeamClient(this.currentTeamId);
     await client.selectIteration(iteration.id);
-    let { iterations } = this.currentTeam;
+    let { iterationIds } = this.currentTeam;
     runInAction(() => {
-      this.currentTeam.iterations = update(
-        iterations || [], {
-        $push: [iteration]
+      this.currentTeam.iterationIds = update(
+        iterationIds || [], {
+        $push: [iteration.id]
       });
-      this.currentTeam.cookedIterations = Iteration.cook(this.currentTeam.iterations);
     });
     //select current
     this.appStore.project.selectIteration();
@@ -107,11 +106,12 @@ class TeamConfigStore {
     if (!this.currentTeamId) return;
     var client = new TeamClient(this.currentTeamId);
     await client.deselectFolder(folder.id);
-    let index = this.currentTeam.folders.findIndex(i => i.id === folder.id);
+    let { folderIds } = this.currentTeam;
+    let index = (folderIds || []).findIndex(id => id === folder.id);
     if (index >= 0) {
       runInAction(() => {
-        this.currentTeam.folders = update(
-          this.currentTeam.folders, {
+        this.currentTeam.folderIds = update(
+          folderIds || [], {
           $splice: [[index, 1]]
         });
       });
@@ -120,17 +120,18 @@ class TeamConfigStore {
 
   @action
   async deselectIteration(iteration) {
+    debugger
     if (!this.currentTeamId) return;
     var client = new TeamClient(this.currentTeamId);
     await client.deselectIteration(iteration.id);
-    let index = this.currentTeam.iterations.findIndex(i => i.id === iteration.id);
+    let { iterationIds } = this.currentTeam;
+    let index = (iterationIds || []).findIndex(id => id === iteration.id);
     if (index >= 0) {
       runInAction(() => {
-        this.currentTeam.iterations = update(
-          this.currentTeam.iterations, {
+        this.currentTeam.iterationIds = update(
+          iterationIds || [], {
           $splice: [[index, 1]]
         });
-        this.currentTeam.cookedIterations = Iteration.cook(this.currentTeam.iterations);
       });
       //select current
       this.appStore.project.selectIteration();
@@ -143,12 +144,13 @@ class TeamConfigStore {
     let { project } = this.appStore;
     let newFolderObj = await project.client.createFolderForTeam(this.currentTeamId, folderObj);
     var newFolder = new Folder(newFolderObj);
+    let { folderIds } = this.currentTeam;
     runInAction(() => {
       let { project: { folders } } = this.appStore;
       folders.push(newFolder);
-      this.currentTeam.folders = update(
-        this.currentTeam.folders || [], {
-        $push: [newFolder]
+      this.currentTeam.folderIds = update(
+        folderIds || [], {
+        $push: [newFolder.id]
       });
     });
   }
@@ -159,12 +161,13 @@ class TeamConfigStore {
     let { project } = this.appStore;
     let newIterationObj = await project.client.createIterationForTeam(this.currentTeamId, iterationObj);
     var newIteration = new Iteration(newIterationObj);
+    let { iterfationIds } = this.currentTeam;
     runInAction(() => {
       let { project: { iterations } } = this.appStore;
       iterations.push(newIteration);
-      this.currentTeam.iterations = update(
-        this.currentTeam.iterations || [], {
-        $push: [newIteration]
+      this.currentTeam.iterationIds = update(
+        iterfationIds || [], {
+        $push: [newIteration.id]
       });
       this.currentTeam.cookedIterations = Iteration.cook(this.currentTeam.iterations);
     });

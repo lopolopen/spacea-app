@@ -7,6 +7,7 @@ class Team {
   @observable name;
   @observable description;
   @observable acronym;
+  @observable folderIds = [];
   @observable iterationIds = [];
   project;
 
@@ -21,6 +22,10 @@ class Team {
 
   @computed get client() {
     return this.id && new TeamClient(this.id);
+  }
+
+  @computed get folders() {
+    return this.folderIds.map(id => this.project.folderMap.get(id));
   }
 
   @computed get iterations() {

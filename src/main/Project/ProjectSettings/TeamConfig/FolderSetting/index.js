@@ -146,7 +146,6 @@ class FolderSetting extends Component {
                   <Tooltip title='排除'>
                     <a disabled={record.id === defFolderId} onClick={async () => {
                       await teamConfigStore.deselectFolder(record);
-                      this.forceUpdate()
                     }}>
                       <Icon type='close' />
                     </a>
@@ -155,7 +154,6 @@ class FolderSetting extends Component {
                   <Tooltip title='选择'>
                     <a onClick={async () => {
                       await teamConfigStore.selectFolder(record);
-                      this.forceUpdate()
                     }}>
                       <Icon type='check' />
                     </a>
