@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import BurndownChart from './BurndownChart';
 import WorkloadCharts from './WorkloadCharts';
+import { FormattedMessage } from 'react-intl';
 
 @inject('appStore')
 @observer
@@ -100,9 +101,8 @@ class AnalysisPanel extends Component {
                           }}
                         >
                           <Button type='primary' style={{ margin: '0 12px 8px 0' }}>
-                            <Icon type='scissor' />
-                            覆盖统计
-                        </Button>
+                            <FormattedMessage id='btn_overwrite' />
+                          </Button>
                         </Popconfirm>
 
                       </div>

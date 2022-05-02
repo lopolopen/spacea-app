@@ -79,6 +79,9 @@
   "type_story": "故事",
   "type_task": "任务",
   "type_bug": "缺陷",
+  "ideal_trend": "理想趋势",
+  "remaining_hours": "剩余工时",
+  "remaning_capacity": "剩余生产工时",
   "state_new": "新建",
   "state_removed": "移除",
   "state_story_active": "实现中",
@@ -88,5 +91,11 @@
   "state_task_closed": "已完成",
   "state_bug_active": "修复中",
   "state_bug_resolved": "已修复",
-  "state_bug_closed": "已验证"
+  "state_bug_closed": "已验证",
+  "tips_no_capacity_settings": "此迭代没有设置生产工时",
+  "tips_jump_to_settings": "去设置",
+  "hours": "小时",
+  "before": "之前",
+  "after": "之后",
+  "btn_overwrite": "重写统计"
 }

@@ -13,11 +13,10 @@ class BurndownRecord {
 
   constructor(options) {
     this.type = options.workItemType;
-    this.typeName = typeMap[options.workItemType].text;
+    this.typeName = options.typeName;
     this.date = moment(options.accountingDate).format('YYYY-M-D');
     this.remainingHours = options.remainingHours;
   }
-
 }
 
 class AnalysisStore {
@@ -33,7 +32,7 @@ class AnalysisStore {
     this.refreshKey = _.uniqueId();
   }
 
-  calcCapacityTrend(start, end, dates, capacityPerDay) {
+  calcCapacityTrend(start, end, dates, capacityPerDay, intl) {
     let workdays = utility.workdaysBetween(start, end);
     let trend = [];
     for (let i = 0, j = 0; i < dates.length; i++) {
@@ -43,7 +42,7 @@ class AnalysisStore {
       }
       trend.push({
         type: 'remainingCapacity',
-        typeName: '剩余生产工时',
+        typeName: intl.formatMessage({ id: 'remaning_capacity' }),
         date: dates[i].format('YYYY-M-D'),
         remainingHours: (workdays - j) * capacityPerDay
       });
@@ -51,7 +50,7 @@ class AnalysisStore {
     return trend;
   }
 
-  calcIdealTrend(start, end, dates, init) {
+  calcIdealTrend(start, end, dates, init, intl) {
     let workdays = utility.workdaysBetween(start, end);
     let trend = [];
     for (let i = 0, j = 0; i < dates.length; i++) {
@@ -62,7 +61,7 @@ class AnalysisStore {
       }
       trend.push({
         type: 'idealTrend',
-        typeName: '理想趋势',
+        typeName: intl.formatMessage({ id: 'ideal_trend' }),
         date: dates[i].format('YYYY-M-D'),
         remainingHours: parseFloat((init - init * j / workdays).toFixed(1))
       });
@@ -85,7 +84,7 @@ class AnalysisStore {
     return await AnalysisClient.getCurrentPoints(teamId, iterationId);
   }
 
-  async getBurndownTrend(team, iteration, capacityPerDay) {
+  async getBurndownTrend(team, iteration, capacityPerDay, intl) {
     let teamId = team.id;
     let iterationId = iteration.id;
     let { startDate, endDate } = iteration;
@@ -129,8 +128,9 @@ class AnalysisStore {
         .map(date => date.format('YYYY-M-D'));
     let burndownTrend = dates.concat(today > end ? [today] : [])
       .map(date => date.format('YYYY-M-D'))
-      .flatMap(accountingDate => types.map(workItemType => new BurndownRecord({
-        workItemType,
+      .flatMap(accountingDate => types.map(type => new BurndownRecord({
+        workItemType: type,
+        typeName: intl.formatMessage({ id: typeMap[type].text }),
         accountingDate,
         remainingHours: undefined
       })));
@@ -150,18 +150,18 @@ class AnalysisStore {
     }
     //最大工作量作为初始值（来计算理想趋势）
     let max = this.calcMax(burndownTrend);
-    let idealTrend = this.calcIdealTrend(start, end, dates, max);
-    let capacityTrend = this.calcCapacityTrend(start, end, dates, capacityPerDay);
+    let idealTrend = this.calcIdealTrend(start, end, dates, max, intl);
+    let capacityTrend = this.calcCapacityTrend(start, end, dates, capacityPerDay, intl);
     if (today > end) {
       idealTrend.push({
         type: 'idealTrend',
-        typeName: '理想趋势',
+        typeName: intl.formatMessage({ id: 'ideal_trend' }),
         date: theDayAfter.format('YYYY-M-D'),
         remainingHours: 0
       });
       capacityTrend.push({
         type: 'remainingCapacity',
-        typeName: '剩余生产工时',
+        typeName: intl.formatMessage({ id: 'remaning_capacity' }),
         date: theDayAfter.format('YYYY-M-D'),
         remainingHours: 0
       });

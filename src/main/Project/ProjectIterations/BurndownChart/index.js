@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Chart } from '@antv/g2';
 import fromEntries from 'object.fromentries';
 import { typeMap } from '../../../../components/WorkItemIcon';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 if (!Object.fromEntries) {
   fromEntries.shim();
@@ -11,18 +12,12 @@ if (!Object.fromEntries) {
 
 const CHART_CONTAINER_ID = 'burndown-chart-container';
 
-const genColor = (typeName) => {
-  const colorMap = Object.fromEntries(new Map(
-    ['story', 'task', 'bug'].map(type => [typeMap[type].text, typeMap[type].color]
-    )));
-  return colorMap[typeName];
-}
-
+@injectIntl
 @inject('appStore')
 class BurndownChart extends Component {
   //charts的重绘依赖父组件给其分配一个新的key
   async componentDidMount() {
-    let { appStore } = this.props;
+    let { appStore, intl } = this.props;
     let {
       analysisStore,
       teamConfigStore,
@@ -39,6 +34,7 @@ class BurndownChart extends Component {
       selectedTeam,
       selectedIteration,
       teamCapacityPerDay,
+      intl
     );
     let {
       max,
@@ -75,6 +71,8 @@ class BurndownChart extends Component {
   }
 
   drawView(chart) {
+    let { intl } = this.props;
+
     const view = chart.createView();
     view.axis(false);
 
@@ -92,13 +90,25 @@ class BurndownChart extends Component {
         if (type === 'remainingCapacity') return { lineDash: [4, 2] }
       })
       .color('typeName', typeName => {
-        if (typeName === '剩余生产工时') return 'rgb(82, 196, 26)';
-        if (typeName === '理想趋势') return 'rgba(0, 0, 0, .6)';
+        if (typeName === intl.formatMessage({ id: 'remaning_capacity' })) return 'rgb(82, 196, 26)';
+        if (typeName === intl.formatMessage({ id: 'ideal_trend' })) return 'rgba(0, 0, 0, .6)';
       });
     return view;
   }
 
   drawChart(start, end) {
+    let { intl } = this.props;
+
+    const genColor = (typeName) => {
+      const colorMap = Object.fromEntries(new Map(
+        ['story', 'task', 'bug'].map(type => [
+          intl.formatMessage({ id: typeMap[type].text }),
+          typeMap[type].color
+        ]
+        )));
+      return colorMap[typeName];
+    }
+
     const chart = new Chart({
       container: CHART_CONTAINER_ID,
       autoFit: true,
@@ -126,8 +136,8 @@ class BurndownChart extends Component {
       label: {
         formatter: date => {
           let dt = moment(date);
-          if (dt < start) return '之前';
-          if (dt > end) return '之后';
+          if (dt < start) return intl.formatMessage({ id: 'before' });
+          if (dt > end) return intl.formatMessage({ id: 'after' });
           return dt.format('M-D')
         }
       }
@@ -155,12 +165,13 @@ class BurndownChart extends Component {
   }
 
   drawBurndownTrend(chart, burndownTrend, top) {
+    let { intl } = this.props;
     chart.data(burndownTrend);
     chart.scale({
       remainingHours: {
         nice: true,
         sync: true,
-        alias: '剩余工时（小时）',
+        alias: intl.formatMessage({ id: 'remaining_hours' }),
         max: top || 40
       }
     });
