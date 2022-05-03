@@ -43,13 +43,13 @@ class WorkloadCharts extends Component {
       return (
         <div style={{ margin: '20px 8px' }}>
           < div style={{ fontSize: 20, padding: 32 }}>
-            <div><FormattedMessage id='tips_no_capacity_settings' /></div>
+            <div><FormattedMessage id='tips_capacity_not_set' /></div>
             <Link to={`${base}/settings/teams/${selectedTeam.id}/config#capacity`}
               onClick={() => {
                 teamConfigStore.setCurrentIteration(selectedIteration)
               }}
             >
-              <FormattedMessage id='tips_jump_to_settings' />
+              <FormattedMessage id='tips_jump_to_set' />
             </Link>
           </div>
         </div>

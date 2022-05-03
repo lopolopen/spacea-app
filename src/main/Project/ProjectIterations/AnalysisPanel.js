@@ -58,8 +58,10 @@ class AnalysisPanel extends Component {
         {
           selectedIteration.workdays === undefined ?
             < div style={{ fontSize: 20, padding: 32 }}>
-              <div>此迭代没有设置开发周期</div>
-              <Link to={`${base}/settings/teams/${selectedTeam.id}/config#iteration`}>去设置</Link>
+              <div><FormattedMessage id='tips_period_not_set' /></div>
+              <Link to={`${base}/settings/teams/${selectedTeam.id}/config#iteration`}>
+                <FormattedMessage id='tips_jump_to_set' />
+              </Link>
             </div>
             :
             this.state.loading ?
@@ -86,13 +88,14 @@ class AnalysisPanel extends Component {
                       <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
                         <Popconfirm
                           title={
-                            <span >
-                              <p style={{ fontWeight: 'bold' }}>确定要覆盖凌晨时段的统计结果吗？</p>
-                              <p style={{ width: 300 }}>
-                                “覆盖统计”将以当前工作事项的统计结果覆盖凌晨时段的统计结果，且更改
-                                <span style={{ color: 'red' }}>不可逆转</span>。
+                            <div style={{ width: 420 }}>
+                              <p style={{ fontWeight: 'bold' }}><FormattedMessage id='tips_overwrite_confirm' /></p>
+                              <p>
+                                <span><FormattedMessage id='tips_overwrite_warning_head' /></span>
+                                <span style={{ color: 'red' }}><FormattedMessage id='tips_overwrite_warning_body' /></span>
+                                <span><FormattedMessage id='tips_overwrite_warning_tail' /></span>
                               </p>
-                            </span>
+                            </div>
                           }
                           placement='left'
                           onConfirm={async () => {
