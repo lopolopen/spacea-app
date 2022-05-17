@@ -42,6 +42,7 @@ export default ({ fileName, ...restProps }) => {
     case '.png':
     case '.bmp':
     case '.gif':
+    case '.svg':
       type = 'file-image';
       break;
     case '.zip':

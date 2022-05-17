@@ -51,7 +51,7 @@ const initInterceptors = (appStore, history) => {
       }, async err => {
         let { response, message: msg } = err;
         if (ENV === 'Development') {
-          if (response && response.status === 500) {
+          if (response && response.status >= 500) {
             appStore.setError(err);
             throw err;
           }

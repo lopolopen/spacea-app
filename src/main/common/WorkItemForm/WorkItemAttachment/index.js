@@ -3,12 +3,17 @@ import React, { Component } from 'react';
 import { Table, Divider, Icon, Upload, Tooltip, Dropdown, Menu, Button } from 'antd';
 import moment from 'moment';
 import update from 'immutability-helper';
+import utility from '../../../../utility';
 import Downloader from '../../../../components/Downloader';
 import FileIcon from '../../../../components/FileIcon';
 import MemberAvatar from '../../../../components/MemberAvatar';
 import AttachmentClient from '../../../../services/api/AttachmentClient';
 import AttachmentState from '../../../../stores/AttachmentState';
+import FilePreview from './FilePreview';
+import 'react-photo-view/dist/react-photo-view.css';
 import './style.less';
+
+const imgExtSet = new Set(["jpg", "jpeg", "png", "bmp", "gif", "svg"]);
 
 class WorkItemAttachment extends Component {
   upload = async ({ file }) => {
@@ -49,6 +54,15 @@ class WorkItemAttachment extends Component {
     }
   }
 
+  imagePreview = async (attachment) => {
+    let { id, fileName, previewUrl, ref } = attachment;
+    if (previewUrl) return;
+    let url = await AttachmentClient.preview(id, fileName);
+    await utility.delay(500);
+    attachment.previewUrl = url;
+    ref && ref.forceUpdate();
+  }
+
   render() {
     let { value } = this.props;
     let attachments = (value || []).filter(a =>
@@ -57,6 +71,113 @@ class WorkItemAttachment extends Component {
     attachments.sort((x, y) => {
       return new Date(x.uploadedTime) - new Date(y.uploadedTime);
     });
+    const columns = [
+      {
+        title: (
+          <span>
+            附件
+            <Divider type='vertical' style={{ margin: '0 16px' }} />
+            <Upload
+              showUploadList={false}
+              customRequest={this.upload}
+            >
+              <a className='attachment-btn'>
+                <Icon type='plus' style={{ color: 'green', marginRight: 6 }} />
+                <span>新增</span>
+              </a>
+            </Upload>
+          </span>
+        ),
+        dataIndex: 'fileName',
+        render: (fileName, { state }) => {
+          return (
+            <span>
+              <span style={{ marginRight: 4 }} >
+                {
+                  state === AttachmentState.adding ?
+                    <Icon type='loading' />
+                    :
+                    <FileIcon fileName={fileName} />
+                }
+              </span>
+              <span>{fileName}</span>
+            </span>
+          );
+        }
+      },
+      {
+        title: '',
+        render: (record) => {
+          let isImg = imgExtSet.has(record.fileName.split('.').pop());
+          return (
+            record.state === AttachmentState.adding ? null :
+              <span className='btns-operation'>
+                <Tooltip title='更多'>
+                  <Dropdown trigger={['click']} overlay={
+                    <Menu>
+                      <Menu.Item key='preview'
+                        disabled={!isImg}
+                        onClick={() => this.imagePreview(record)} >
+                        <FilePreview file={record} ref={ref => record.ref = ref} >
+                          <Icon type='eye' style={{ color: '#1890ff' }} />
+                          <span>预览</span>
+                        </FilePreview>
+                      </Menu.Item>
+                      <Menu.Item key='download' >
+                        <span className='attachment-menu-item-fix'>
+                          <Downloader
+                            fileName={record.fileName}
+                            download={() => AttachmentClient.download(record.id, record.fileName)}
+                          >
+                            <Icon type='download' style={{ color: '#1890ff' }} />
+                            <span>下载</span>
+                          </Downloader>
+                        </span>
+                      </Menu.Item>
+                      <Menu.Item key='delete'
+                        className='attachment-menu-item'
+                        onClick={() => this.delete(record)}>
+                        <Icon type='close' style={{ color: 'red' }} />
+                        <span>删除</span>
+                      </Menu.Item>
+                    </Menu >
+                  }>
+                    <a><Icon type='ellipsis' /></a>
+                  </Dropdown >
+                </Tooltip>
+              </span>
+          )
+        }
+      },
+      {
+        title: '大小',
+        dataIndex: 'size',
+        render: size => {
+          if (!size) return null;
+          if (size < 102) return `${size} B`;
+          size = size / 1024;
+          if (size < 102) return `${size.toFixed(1)} K`;
+          size = size / 1024;
+          if (size < 102) return `${size.toFixed(1)} M`;
+          size = size / 1024;
+          return `${size.toFixed(1)} G`;
+        }
+      },
+      {
+        title: '上传时间',
+        dataIndex: 'uploadedTime',
+        render: time => time && moment(time).format('YYYY-MM-DD HH:mm')
+      },
+      {
+        title: '上传人',
+        dataIndex: 'creator',
+        render: creator => creator && <MemberAvatar member={creator} size='small' labeled />
+      },
+      {
+        title: '',
+        width: '30%'
+      }
+    ];
     return (
       <div className='WorkItemAttachment'>
         {
@@ -81,123 +202,16 @@ class WorkItemAttachment extends Component {
               </Upload>
             </div>
             :
-            <Table rowKey='id'
-              size={'small'}
-              pagination={false}
-              columns={[
-                // {
-                //   title: 'ID',
-                //   dataIndex: 'id'
-                // },
-                {
-                  title: (
-                    <span>
-                      附件
-                      <Divider type='vertical' style={{ margin: '0 16px' }} />
-                      <Upload
-                        showUploadList={false}
-                        customRequest={this.upload}
-                      >
-                        <a>
-                          <Icon type='plus' style={{ color: 'green', marginRight: 6 }} />
-                          <span>新增</span>
-                        </a>
-                      </Upload>
-                    </span>
-                  ),
-                  dataIndex: 'fileName',
-                  render: (fileName, { state }) => {
-                    return (
-                      <span>
-                        <span style={{ marginRight: 4 }} >
-                          {
-                            state === AttachmentState.adding ?
-                              < Icon type='loading' />
-                              :
-                              <FileIcon fileName={fileName} />
-                          }
-                        </span>
-                        <span>{fileName}</span>
-                      </span>
-                    );
-                  }
-                },
-                {
-                  title: '',
-                  render: (record) => (
-                    record.state === AttachmentState.adding ? null :
-                      <span className='btns-operation'>
-                        <Tooltip title='操作'>
-                          <Dropdown trigger={['click']} overlay={
-                            <Menu>
-                              <Menu.Item key='preview' disabled
-                                onClick={null} >
-                                <span>
-                                  <Icon type='eye' style={{ color: '#1890ff' }} />
-                                  <span>预览</span>
-                                </span>
-                              </Menu.Item>
-                              <Menu.Item key='download'>
-                                <Downloader
-                                  fileName={record.fileName}
-                                  download={() => AttachmentClient.download(record.id, record.fileName)}
-                                >
-                                  <Icon type='download' style={{ color: '#1890ff' }} />
-                                  <span>下载</span>
-                                </Downloader>
-                              </Menu.Item>
-                              <Menu.Item key='delete'
-                                onClick={() => this.delete(record)}>
-                                <span>
-                                  <Icon type='close' style={{ color: 'red' }} />
-                                  <span>删除</span>
-                                </span>
-                              </Menu.Item>
-                            </Menu >
-                          }>
-                            <a><Icon type='ellipsis' /></a>
-                          </Dropdown >
-                        </Tooltip>
-                      </span>
-                  )
-                },
-                {
-                  title: '大小',
-                  dataIndex: 'size',
-                  render: size => {
-                    if (!size) return null;
-                    if (size < 102) return `${size} B`;
-                    size = size / 1024;
-                    if (size < 102) return `${size.toFixed(1)} K`;
-                    size = size / 1024;
-                    if (size < 102) return `${size.toFixed(1)} M`;
-                    size = size / 1024;
-                    return `${size.toFixed(1)} G`;
-                  }
-                },
-                {
-                  title: '上传时间',
-                  dataIndex: 'uploadedTime',
-                  render: time => time && moment(time).format('YYYY-MM-DD HH:mm')
-                },
-                {
-                  title: '上传人',
-                  dataIndex: 'creator',
-                  render: creator => creator && <MemberAvatar member={creator} size='small' labeled />
-                },
-                // {
-                //   title: '备注',
-                //   dataIndex: 'comments'
-                // },
-                {
-                  title: '',
-                  width: '30%'
-                }
-              ]}
-              dataSource={attachments}
-            />
+            <div>
+              <Table rowKey='id'
+                size={'small'}
+                pagination={false}
+                columns={columns}
+                dataSource={attachments}
+              />
+            </div >
         }
-      </div>
+      </div >
     );
   }
 }
