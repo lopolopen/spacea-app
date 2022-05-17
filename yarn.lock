@@ -10444,6 +10444,11 @@ react-moment@^0.9.7:
   resolved "https://registry.npm.taobao.org/react-moment/download/react-moment-0.9.7.tgz#ca570466595b1aa4f7619e62da18b3bb2de8b6f3"
   integrity sha1-ylcEZllbGqT3YZ5i2hizuy3otvM=
 
+react-photo-view@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-photo-view/-/react-photo-view-1.1.2.tgz#7564d364768cd8eb6701a0b46d18d5d51c946684"
+  integrity sha512-UeNDUbXY9813pJcyFEgOBiwVC5vcV9RAGsO78pS9bG6Zkdb4jng2Y9DNvo0ExuJ/7Zm6Hf2c1q18ZiDeH35OIg==
+
 react-redux@5.0.7:
   version "5.0.7"
   resolved "https://registry.npm.taobao.org/react-redux/download/react-redux-5.0.7.tgz#0dc1076d9afb4670f993ffaef44b8f8c1155a4c8"

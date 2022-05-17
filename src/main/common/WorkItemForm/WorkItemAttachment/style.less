@@ -1,5 +1,24 @@
 .WorkItemAttachment {
   .ant-table {
     border: 0 !important;
+
+    tr:hover {
+      .attachment-name {
+        cursor: pointer;
+        color: #3399ea;
+      }
+    }
+  }
+}
+
+.attachment-menu-item-fix {
+  margin-left: -1px;
+
+  a {
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .anticon {
+    margin-right: 7px;
   }
 }

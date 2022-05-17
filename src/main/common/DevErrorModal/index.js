@@ -5,13 +5,26 @@ import './style.less';
 
 class DevErrorModal extends Component {
   state = {
-    visible: true
+    visible: true,
+    html: null
   };
 
-  render() {
-    let { visible } = this.state;
+  async componentDidUpdate() {
     let { error } = this.props;
     if (!error || !error.response) return null;
+    let data = error.response.data
+    if (data instanceof Blob) {
+      data = await error.response.data.text()
+    }
+    this.setState({
+      html: data
+    });
+  }
+
+  render() {
+    let { visible, html } = this.state;
+    let { error } = this.props;
+    if (!html) return null;
     return (
       <Modal className='DevErrorModal'
         title={<span className='title'><Icon type="close-circle" />{`Code ${error.response.status}: ${error.response.statusText}`}</span>}
@@ -24,7 +37,7 @@ class DevErrorModal extends Component {
         onOk={() => this.setState({ visible: false })}
       >
         {
-          <Frame initialContent={error.response.data} />
+          <Frame initialContent={html} />
         }
       </Modal>
     );

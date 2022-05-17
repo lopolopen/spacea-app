@@ -33,7 +33,14 @@ class AttachmentClient {
     });
     return get(`/attachments/${id}/download?${query}`, {
       responseType: 'blob'
-    })
+    });
+  }
+
+  static preview(id, fileName) {
+    let query = queryString.stringify({
+      fileName
+    });
+    return post(`/attachments/${id}/preview?${query}`);
   }
 }
 

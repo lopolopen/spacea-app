@@ -43,6 +43,7 @@
     "react-intl": "^5.25.0",
     "react-jsx-parser": "^1.25.1",
     "react-moment": "^0.9.7",
+    "react-photo-view": "^1.1.2",
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.3.0",
     "react-split-pane": "^2.0.3",

@@ -120,7 +120,6 @@ class TeamConfigStore {
 
   @action
   async deselectIteration(iteration) {
-    debugger
     if (!this.currentTeamId) return;
     var client = new TeamClient(this.currentTeamId);
     await client.deselectIteration(iteration.id);
