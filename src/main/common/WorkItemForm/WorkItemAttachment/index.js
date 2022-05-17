@@ -95,7 +95,7 @@ class WorkItemAttachment extends Component {
               <span style={{ marginRight: 4 }} >
                 {
                   state === AttachmentState.adding ?
-                    < Icon type='loading' />
+                    <Icon type='loading' />
                     :
                     <FileIcon fileName={fileName} />
                 }
