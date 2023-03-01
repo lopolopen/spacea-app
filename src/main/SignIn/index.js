@@ -5,6 +5,7 @@ import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import MemberAvatar from '../../components/MemberAvatar';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import * as Setting from '../../setting';
 import './style.less';
 
 const LOCAL_STORAGE_ACCOUNT_NAME = 'account_name';
@@ -46,7 +47,8 @@ class SignInForm extends React.Component {
         }
         if (state) {
           let { from } = state;
-          history.push(from.pathname);
+          //debugger
+          history.push(from.pathname + from.hash);
         } else {
           history.push('/');
         }
@@ -63,9 +65,20 @@ class SignInForm extends React.Component {
     });
   };
 
+  renderProviderLogo(provider, application, width, margin) {
+    if (provider.category === "OAuth") {
+      return (
+        <a key={provider.displayName} href={Setting.getAuthUrl(application, provider, "signup")}>
+          <img width={width} height={width} src={Setting.getProviderLogoURL(provider)} alt={provider.displayName} style={{ margin: margin }} />
+        </a>
+      );
+    }
+  }
+
   render() {
-    let { intl, form } = this.props;
+    let { intl, form, appStore } = this.props;
     const { getFieldDecorator } = form;
+    const { application } = appStore;
     let accountName = localStorage.getItem(LOCAL_STORAGE_ACCOUNT_NAME);
     let { validateStatus, help } = this.state;
     return (
@@ -105,6 +118,17 @@ class SignInForm extends React.Component {
               <FormattedMessage id='sign_in' />
             </Button>
           </Form.Item>
+          {
+            application &&
+            application.providers &&
+            <Form.Item>
+              {
+                application.providers.filter(p => p.canSignIn).map(p => {
+                  return this.renderProviderLogo(p.provider, application, 30, 5)
+                })
+              }
+            </Form.Item>
+          }
         </Form>
       </div>
     );

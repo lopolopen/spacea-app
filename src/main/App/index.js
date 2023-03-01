@@ -10,7 +10,7 @@ import utility from '../../utility';
 
 import SignIn from '../../main/SignIn';
 import PrivateRoute from '../../components/PrivateRoute';
-import { initInterceptors } from '../../services/axiosConfig';
+import { initInterceptors, nakedClient } from '../../services/axiosConfig';
 import DevErrorModal from '../common/DevErrorModal';
 import UiStateKeys from '../../stores/UiStateKeys';
 // import BuildInfoClient from '../../services/api/BuildInfoClient';
@@ -25,6 +25,8 @@ import zh from '../../locales/zh-CN.json';
 import en from '../../locales/en-US.json';
 
 import './style.less';
+
+import Sdk from 'casdoor-js-sdk'
 
 const { Sider, Header, Content } = Layout;
 const bgColor = 'white';
@@ -74,10 +76,38 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    let { appStore } = this.props;
+    let { appStore, history, location } = this.props;
     let { uiStateStore } = appStore;
     uiStateStore.loadUiState();
-    await appStore.signInWithToken();
+
+    debugger
+    if (location.pathname === '/callback') {
+      const sdkConfig = {
+        serverUrl: "http://localhost:5000/casdoor",
+        clientId: "4340b62ac0480f7f3a4e",
+        appName: "spacea",
+        organizationName: "lopolop",
+        redirectPath: "/callback",
+      }
+      const sdk = new Sdk(sdkConfig);
+      // let x = await sdk.getSigninUrl();
+      // history.push(x);
+      let x = await sdk.signin(sdkConfig.serverUrl)
+      const params = new URLSearchParams(window.location.search)
+      // nakedClient.post()
+      debugger
+      // signin(serverUrl) {
+      //   const params = new URLSearchParams(window.location.search);
+      //   return fetch(`${serverUrl}/api/signin?code=${params.get("code")}&state=${params.get("state")}`, {
+      //       method: "POST",
+      //       credentials: "include",
+      //   }).then(res => res.json());
+
+    }
+    await Promise.all([
+      appStore.signInWithToken(),
+      appStore.loadApplication()
+    ]);
     // var buildInfo = await BuildInfoClient.getAll();
     // this.setState({ buildInfo });
   }

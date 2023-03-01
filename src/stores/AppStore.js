@@ -18,6 +18,7 @@ import AnalysisStore from './AnalysisStore';
 import UiStateStore from './UiStateStore';
 import ServiceStore from './ServiceStore';
 import { Member } from './MemberStore';
+import CasdoorClient from '../services/api/CasdoorClient';
 
 configure({ enforceActions: 'observed' });
 
@@ -28,7 +29,8 @@ class AppStore {
   @observable project;
   @observable todo;
   @observable config;
-  @observable buildInfo;
+  @observable application;
+  // @observable buildInfo;
   projectStore = new ProjectStore(this);
   workItemStore = new WorkItemStore(this);
   projectConfigStore = new ProjectConfigStore(this);
@@ -78,6 +80,7 @@ class AppStore {
         });
       }
     }
+    return this.me != null;
   }
 
   @action
@@ -243,6 +246,16 @@ class AppStore {
     runInAction(() => {
       this.metas = metas;
     });
+  }
+
+  @action
+  async loadApplication() {
+    let app = await CasdoorClient.getApplication('admin/spacea');
+    if (app.status !== 'error') {
+      runInAction(() => {
+        this.application = app;
+      });
+    }
   }
 }
 

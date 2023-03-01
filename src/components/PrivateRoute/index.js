@@ -9,6 +9,7 @@ class PrivateRoute extends Component {
     //undefined: 一般是页面初始化
     //null: token不存在，或token无效（且刷新失败）
     //{...}: token验证成功
+    //debugger
     if (undefined === me) return null;
     if (null === me) {
       return <Redirect to={{ pathname: '/sign_in', state: { from: location } }} />
